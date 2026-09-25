@@ -4,7 +4,7 @@ This is your personal prototyping workspace for the "Prototyping for Masters" cl
 
 ## Getting started
 
-This project uses Node.js 26.9.0. If you use a Node version manager, it can read
+This project uses Node.js 24 LTS, which is supported by Vercel. If you use a Node version manager, it can read
 the included `.nvmrc` or `.node-version` file to select the correct version.
 
 1. Click "Use this template"
