@@ -1,49 +1,25 @@
-import Link from "next/link";
+import Link from 'next/link';
+import TouchScene from './touch/TouchScene';
+import AirbuyFeature from './airbuy/Feature';
+import SalomeFeature from './salome/Feature';
+import MushroomFeature from './mushroom/Feature';
 import styles from './styles/home.module.css';
-import { instrumentSans } from './fonts';
 
 export default function Home() {
-  // Add your prototypes to this array
-  const prototypes = [
-    {
-      title: 'Getting started',
-      description: 'How to create a prototype',
-      path: '/prototypes/example'
-    },
-    {
-      title: 'Confetti button',
-      description: 'An interactive button that creates a colorful confetti explosion',
-      path: '/prototypes/confetti-button'
-    },
-    // Add your new prototypes here like this:
-    // {
-    //   title: 'Your new prototype',
-    //   description: 'A short description of what this prototype does',
-    //   path: '/prototypes/my-new-prototype'
-    // },
-  ];
-
-  return (
-    <div className={`${styles.container} ${instrumentSans.className}`}>
-      <header className={styles.header}>
-        <h1>Elizabeth's prototypes</h1>
-      </header>
-
-      <main>
-        <section className={styles.grid}>
-          {/* Goes through the prototypes list (array) to create cards */}
-          {prototypes.map((prototype, index) => (
-            <Link 
-              key={index}
-              href={prototype.path} 
-              className={styles.card}
-            >
-              <h3>{prototype.title}</h3>
-              <p>{prototype.description}</p>
-            </Link>
-          ))}
-        </section>
-      </main>
-    </div>
-  );
+  return <div className={styles.site}>
+    <TouchScene />
+    <AirbuyFeature />
+    <SalomeFeature />
+    <MushroomFeature />
+    <section className={styles.experiments} id="playground" aria-labelledby="experiments-title">
+      <div className={styles.sectionTop}><p>A FEW THINGS I’M PLAYING WITH</p><span>MA QIANYI / Kate</span></div>
+      <h2 id="experiments-title">Little experiments.</h2>
+      <div className={styles.projectList}>
+        <Link href="/name"><span className={styles.projectIndex}>01</span><span>MA QIANYI / Kate<small>A name, a little daydream, a rainy afternoon.</small></span><span aria-hidden="true">↗</span></Link>
+        <Link href="/prototypes/example"><span className={styles.projectIndex}>02</span><span>Getting started<small>A place for the next idea.</small></span><span aria-hidden="true">↗</span></Link>
+        <Link href="/prototypes/confetti-button"><span className={styles.projectIndex}>03</span><span>Confetti button<small>A little moment of joy.</small></span><span aria-hidden="true">↗</span></Link>
+      </div>
+      <footer className={styles.footer}><span>Made with curiosity.</span><span>Kate © 2026</span></footer>
+    </section>
+  </div>;
 }

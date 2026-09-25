@@ -22,8 +22,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Elizabeth's prototypes",
-  description: "The home for all my prototypes",
+  title: "MA QIANYI — Kate",
+  description: "MA QIANYI, also Kate. A small corner of my world — ideas, play, and little experiments.",
   icons: {
     icon: [
       {
