@@ -5,34 +5,20 @@ A bilingual poster playground built from `app/prototypes/_template`.
 
 ## Run / 运行
 
-From the project root, run `npm run dev`, open the homepage and choose
-**Typography experiments / 字体实验**, or open `/prototypes/typography-experiments`.
-在项目根目录运行 `npm run dev`，然后从首页进入「字体实验」。
-
-No additional dependencies. React manages text and controls; CSS handles text layout,
-transforms and motion. Dragon & Bread Type uses an original generated PNG illustration
-on a parchment background. 没有新增依赖；排版和动画用 CSS，龙的插画是原创生成素材。
+From the project root, run `npm run dev`, then open `/prototypes/typography-experiments` or use the homepage link.
+在项目根目录运行 `npm run dev`，然后打开 `/prototypes/typography-experiments`，也可以从首页进入。
 
 ## Controls / 操作
 
-- Enter up to 300 characters in Dragon & Bread Type, or choose Wave, Orbit, Perspective and Crumb.
-  在龙与面包字中输入最多 300 个字符，也可选择波浪、环绕、立体倾斜或面包纹理。
-- Switch between Chinese and English with the header button.
-  点击顶部按钮切换中英文。
-- Adjust font weight, width, optical size, distortion and colors.
-  调整字重、宽度、视觉尺寸、变形程度和颜色。
-- Motion starts on for the dragon and can be paused above the poster; it respects reduced-motion system preferences.
-  龙默认有轻微浮动，可在海报上方暂停；动画遵循系统的减少动态效果设置。
-- Print / Save PDF uses the browser's print dialog and a poster-only print style.
-  打印 / 保存 PDF 使用浏览器打印窗口，只打印海报。
+- Type up to 80 characters. Short words make the bread texture and pores easier to see. Line breaks are kept in the poster.
+  输入最多 80 个字符；短词更能看清面包纹理和气孔，换行会保留在海报里。
+- Choose Bread type, Wave, Orbit, or Perspective. Bread type is the default.
+  可选择面包字、波浪、环绕或立体倾斜；默认显示面包字。
+- Switch between Chinese and English, adjust the variable font, distortion and colors, toggle motion, or print the poster.
+  可切换中英文、调整可变字体与变形程度、更换颜色、开关动态效果，或打印海报。
 
-Bricolage Grotesque is bundled locally with its SIL Open Font License. Its variable
-axes affect Latin characters; Chinese falls back to a system font. The Crumb
-texture uses the supplied bread reference image. All styles stay in this prototype's
-CSS Module. 模块化样式不会影响其他页面；可变字体对拉丁字母生效，中文使用系统字体。
+For A–Z, CSS positions the exact hand-cut bread letters from the supplied alphabet reference inside responsive letter spans. This preserves their irregular outlines and natural pores. Chinese and unsupported characters use the supplied bread photograph as a CSS text fill, with varied gradient pores, clipping and layered shadows. The black background follows the original reference. No graphics or animation library is used by this prototype.
+对于 A–Z，CSS 会在响应式字母容器里定位用户参考图中原本的面包字母，保留不规则外形和真实气孔。中文与其他未收录字符仍使用用户提供的面包照片作为 CSS 字形填充，并叠加不同大小的渐变气孔、裁切和阴影。黑色背景呼应最初的参考图。本原型不使用图形或动画库。
 
-The small dragon artwork was generated with the built-in ImageGen tool from this prompt: “One original miniature East Asian dragon, long horizontal S-curve, intricate black ink engraving with restrained burnt-red and antique-gold accents, flat warm parchment background, no text.” It is saved locally as `assets/dragon-small.png`. 小龙素材保存在 `assets/dragon-small.png`。
-
-The Crumb treatment uses CSS sepia filtering to remove the purple patches from the reference image and layered shadows plus 3D transforms to give the letters depth. 面包模式通过 CSS 棕褐色滤镜去掉紫色，并用多层阴影与 3D 变换增加厚度。
-
-Dragon & Bread Type repeats the entered text as a typographic field and leaves a winding series of gaps for the small dragon. CSS animates the dragon along those gaps; the existing bread reference supplies the letter texture. 龙与面包字会把输入文字排成多行，龙沿着字行留出的空隙游走。
+Bricolage Grotesque is bundled locally with its SIL Open Font License. Its variable axes affect Latin characters; Chinese falls back to a system font. All prototype styles stay in the local CSS Module.
+Bricolage Grotesque 可变字体及其 SIL Open Font License 保存在本地；可变轴作用于拉丁字母，中文使用系统字体。所有样式都保留在原型自己的 CSS Module 中。
