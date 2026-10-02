@@ -5,14 +5,12 @@ import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import styles from './styles.module.css';
 
 type Mode = 'cutout' | 'wave' | 'circle' | 'skew';
-type Palette = 'acid' | 'paper' | 'blue' | 'pink';
 const modes: Mode[] = ['cutout', 'wave', 'circle', 'skew'];
-const palettes: Palette[] = ['acid', 'paper', 'blue', 'pink'];
 const cn = (...names: string[]) => names.map(name => styles[name]).filter(Boolean).join(' ');
 const variables = (values: Record<string, string | number>) => values as CSSProperties;
 const copy = {
-  zh: {back:'返回首页', badge:'CSS 字体实验', eyebrow:'让文字，有点不一样。', title:'给你的文字，\n换一种形状。', input:'写下你的文字', hint:'短词更能看清面包气孔；输入后海报会实时更新。', treatment:'字体效果', names:['面包字','波浪','环绕','立体倾斜'], variable:'可变字体', weight:'字重', width:'宽度', optical:'视觉尺寸', customize:'自由调整', distortion:'变形程度', palette:'背景 / 墨色', motion:'让文字动起来', live:'实时海报', notes:['像从面包瓤里切出来的字：手工轮廓、深浅不一的气孔。','给文字一点节奏。','让文字围成一个圆。','换个角度，看见新的可能。'], same:'同样的文字。', different:'不一样的可能。', print:'打印 / 保存 PDF', empty:'你的文字，会出现在这里。', foot:'动手试试，随意改变。', fontNote:'可变轴作用于拉丁字母；中文使用系统字体。', paletteNames:['黑底','纸白','蓝底','粉底']},
-  en: {back:'Back to home', badge:'CSS type experiments', eyebrow:'WORDS IN. WORLDS OUT.', title:'Give your words\na different shape.', input:'Your words', hint:'Short words show the bread’s open crumb best. The poster updates as you type.', treatment:'Treatment', names:['Bread type','Wave','Orbit','Perspective'], variable:'Variable type', weight:'Weight', width:'Width', optical:'Optical size', customize:'Make it yours', distortion:'Distortion', palette:'Background / ink', motion:'Set it in motion', live:'LIVE SPECIMEN', notes:['Letters cut from the crumb: uneven edges and pockets of air.','A little rhythm. A lot of character.','Words that come full circle.','A different angle on the everyday.'], same:'Same words.', different:'Different possibilities.', print:'Print / Save PDF', empty:'Your words go here.', foot:'Built to play. Made to be bent.', fontNote:'Variable axes affect Latin letters; Chinese uses a system font.', paletteNames:['Black','Paper','Blue','Pink']}
+  zh: {back:'返回首页', badge:'CSS 字体实验', eyebrow:'让文字，有点不一样。', title:'给你的文字，\n换一种形状。', input:'写下你的文字', hint:'短词更能看清面包气孔；输入后海报会实时更新。', treatment:'面包字排版', names:['原味面包字','波浪面包字','环绕面包字','倾斜面包字'], variable:'可变字体', weight:'字重', width:'宽度', optical:'视觉尺寸', customize:'自由调整', distortion:'变形程度', motion:'让文字动起来', toast:'烘烤面包', toasting:'烘烤中…', resetToast:'恢复原味', toastHint:'点击后会从金黄逐渐烤出焦黑斑块。', live:'实时海报', notes:['手工轮廓和深浅不一的气孔。','同一套面包字母，排成起伏的波浪。','同一套面包字母，沿圆周环绕。','同一套面包字母，形成倾斜的立体视角。'], same:'同样的文字。', different:'不一样的可能。', print:'打印 / 保存 PDF', empty:'你的文字，会出现在这里。', foot:'动手试试，随意改变。', fontNote:'参考图的 A–Z 字形不受可变轴影响；未收录的字符使用可变字体。'},
+  en: {back:'Back to home', badge:'CSS type experiments', eyebrow:'WORDS IN. WORLDS OUT.', title:'Give your words\na different shape.', input:'Your words', hint:'Short words show the bread’s open crumb best. The poster updates as you type.', treatment:'Bread type layouts', names:['Original bread','Bread wave','Bread orbit','Bread perspective'], variable:'Variable type', weight:'Weight', width:'Width', optical:'Optical size', customize:'Make it yours', distortion:'Distortion', motion:'Set it in motion', toast:'Toast the bread', toasting:'Toasting…', resetToast:'Fresh again', toastHint:'Watch golden crumb develop dark, charred patches.', live:'LIVE SPECIMEN', notes:['Hand-cut edges and deep, uneven air pockets.','The same bread letters rise and fall in a wave.','The same bread letters travel around a circle.','The same bread letters tilt into perspective.'], same:'Same words.', different:'Different possibilities.', print:'Print / Save PDF', empty:'Your words go here.', foot:'Built to play. Made to be bent.', fontNote:'The reference A–Z shapes stay fixed; variable axes affect unsupported characters.'}
 };
 
 // Text becomes ordinary spans. CSS handles every visual effect and animation.
@@ -68,7 +66,7 @@ export default function TypographyExperiments() {
   const [language, setLanguage] = useState<'zh'|'en'>('zh');
   const [sentence, setSentence] = useState('BREAD\nTYPE');
   const [mode, setMode] = useState<Mode>('cutout');
-  const [palette, setPalette] = useState<Palette>('acid');
+  const [toastPhase, setToastPhase] = useState<'fresh' | 'baking' | 'burnt'>('fresh');
   const [weight, setWeight] = useState(800);
   const [width, setWidth] = useState(100);
   const [optical, setOptical] = useState(72);
@@ -76,13 +74,18 @@ export default function TypographyExperiments() {
   const [motion, setMotion] = useState(false);
   const artRef = useRef<HTMLDivElement>(null);
   const compositionRef = useRef<HTMLDivElement>(null);
-  const t = copy[language], index = modes.indexOf(mode), lines = makeLines(sentence, mode === 'cutout' ? 6 : 10);
+  const t = copy[language], index = modes.indexOf(mode), lines = makeLines(sentence, 6);
   const raw = sentence.trim();
-  const circleChars = characters(raw + ' · ');
-  const ringCount = Math.ceil(circleChars.length / 44);
-  const chunkSize = Math.ceil(circleChars.length / ringCount);
+  const circleChars = characters(raw.replace(/\s+/gu, ''));
+  const ringCount = Math.max(1, Math.ceil(circleChars.length / 22));
+  const chunkSize = Math.max(1, Math.ceil(circleChars.length / ringCount));
   const longest = Math.max(1, ...lines.map(line => characters(line).length));
-  const fontSize = mode === 'cutout' ? Math.min(25,138 / longest,86 / Math.max(lines.length,1)) : Math.min(19,138 / longest,66 / Math.max(lines.length,1));
+  const fontSize = Math.min(25,138 / longest,86 / Math.max(lines.length,1));
+  useEffect(() => {
+    if (toastPhase !== 'baking') return;
+    const timer = window.setTimeout(() => setToastPhase('burnt'), 2600);
+    return () => window.clearTimeout(timer);
+  }, [toastPhase]);
   useEffect(() => {
     const art = artRef.current, composition = compositionRef.current;
     if (!art || !composition) return;
@@ -101,7 +104,7 @@ export default function TypographyExperiments() {
 
   function glyphs(text: string, offset = 0) {
     return characters(text).map((char,i) => {
-      const bounds = mode === 'cutout' ? breadAlphabet[char.toUpperCase()] : undefined;
+      const bounds = breadAlphabet[char.toUpperCase()];
       if (bounds) {
         const [x,y,w,h] = bounds;
         return <span key={i} className={styles.breadSprite} style={variables({
@@ -117,22 +120,22 @@ export default function TypographyExperiments() {
     <header><Link href="/" className={styles.brand}><span className={styles.logo}>t<span>e</span></span><span>typography<span className={styles['brand-bottom']}>experiments</span></span></Link><Link href="/#playground" className={styles.backLink}>← {t.back}</Link><button type="button" className={styles.language} onClick={() => setLanguage(language === 'zh' ? 'en' : 'zh')} aria-label="Switch between Chinese and English">中文 <span aria-hidden="true">/</span> EN</button></header>
     <main><aside><div className={styles.eyebrow}>{t.eyebrow}</div><h1>{t.title.split('\n').map((line,i)=><span key={i}>{line}{i===0&&<br/>}</span>)}</h1>
       <div className={styles['text-label']}><label htmlFor="sentence">{t.input}</label><span>{characters(sentence).length} / 80</span></div><textarea id="sentence" rows={3} value={sentence} spellCheck={false} onChange={event=>setSentence(characters(event.target.value).slice(0,80).join(''))}/><p className={styles.hint}>{t.hint}</p>
-      <section><div className={styles['section-label']}><span>01</span><h2>{t.treatment}</h2></div><div className={styles.treatments} role="group" aria-label={t.treatment}>{modes.map((item,i)=><button key={item} type="button" onClick={()=>{setMode(item);if(item==='cutout')setPalette('acid');}} aria-pressed={mode===item}><span className={cn('mini',item==='circle'?'circle-mini':item+'-mini')} aria-hidden="true">{['Aa','~Aa~','◌','Aa'][i]}</span><span>{t.names[i]}</span><small>0{i+1}</small></button>)}</div></section>
+      <section><div className={styles['section-label']}><span>01</span><h2>{t.treatment}</h2></div><div className={styles.treatments} role="group" aria-label={t.treatment}>{modes.map((item,i)=><button key={item} type="button" onClick={()=>setMode(item)} aria-pressed={mode===item}><span className={cn('mini',item==='circle'?'circle-mini':item+'-mini')} aria-hidden="true">{['Aa','~Aa~','◌','Aa'][i]}</span><span>{t.names[i]}</span><small>0{i+1}</small></button>)}</div></section>
       <section><div className={styles['section-label']}><span>02</span><h2>{t.variable}</h2><span className={styles.tag}>VF</span></div><div className={styles['font-name']}>Bricolage Grotesque</div>
         <label htmlFor="weight">{t.weight}<output>{weight}</output></label><input id="weight" type="range" min={200} max={800} value={weight} onChange={e=>setWeight(Number(e.target.value))}/>
         <label htmlFor="width">{t.width}<output>{width}%</output></label><input id="width" type="range" min={75} max={100} value={width} onChange={e=>setWidth(Number(e.target.value))}/>
-        <label htmlFor="optical">{t.optical}<output>{optical}</output></label><input id="optical" type="range" min={12} max={96} value={optical} onChange={e=>setOptical(Number(e.target.value))}/><p className={styles.fontNote}>{mode === 'cutout' ? (language === 'zh' ? '面包字 A–Z 使用参考图的原始字形；可变轴影响其他模式及未收录的字符。' : 'Bread A–Z uses the original reference letters; variable axes affect other treatments and unsupported characters.') : t.fontNote}</p>
+        <label htmlFor="optical">{t.optical}<output>{optical}</output></label><input id="optical" type="range" min={12} max={96} value={optical} onChange={e=>setOptical(Number(e.target.value))}/><p className={styles.fontNote}>{t.fontNote}</p>
       </section>
       <section><div className={styles['section-label']}><span>03</span><h2>{t.customize}</h2></div><label htmlFor="intensity">{t.distortion}<output>{intensity}%</output></label><input id="intensity" type="range" min={0} max={100} value={intensity} onChange={e=>setIntensity(Number(e.target.value))}/>
-        {mode !== 'cutout' && <div className={styles['palette-row']}><span>{t.palette}</span><div className={styles.palettes} role="group" aria-label={t.palette}>{palettes.map((item,i)=><button key={item} type="button" className={styles[item]} onClick={()=>setPalette(item)} aria-label={t.paletteNames[i]} aria-pressed={palette===item}/>)}</div></div>}
         <label className={styles['motion-label']}><span>{t.motion}</span><input type="checkbox" role="switch" checked={motion} onChange={e=>setMotion(e.target.checked)}/></label>
+        <button type="button" className={styles.toastButton} onClick={()=>setToastPhase(toastPhase === 'burnt' ? 'fresh' : 'baking')} disabled={toastPhase === 'baking'} aria-pressed={toastPhase !== 'fresh'}><span aria-hidden="true">{toastPhase === 'burnt' ? '↺' : '✳'}</span>{toastPhase === 'fresh' ? t.toast : toastPhase === 'baking' ? t.toasting : t.resetToast}</button><p className={styles.toastHint}>{t.toastHint}</p>
       </section>
     </aside><div className={styles.workspace}><div className={styles['work-top']}><div><span className={styles['live-label']}>{t.live}</span><span className={styles.treatmentLabel}>0{index+1} / {t.names[index]}</span></div><span className={styles['scale-label']}>{t.badge}</span></div>
-      <div className={cn('poster',mode,...(motion?['moving']:[]))} data-palette={palette} role="img" aria-label={`${t.names[index]}: ${sentence}`} style={variables({'--weight':weight,'--width':width,'--optical':optical,'--intensity':intensity/100})}>
-        <div className={styles['poster-top']} aria-hidden="true"><span>{mode === 'cutout' ? <>CUT FROM<br/>THE CRUMB.</> : <>TYPE IS A<br/>PLAYGROUND.</>}</span><span>EXPERIMENT<br/>№ 00{index+1}</span></div>
+      <div className={cn('poster',mode,...(motion?['moving']:[]),...(toastPhase !== 'fresh' ? [toastPhase] : []))} role="img" aria-label={`${t.names[index]}: ${sentence}${toastPhase === 'burnt' ? (language === 'zh' ? '，已烤焦' : ', charred') : ''}`} style={variables({'--weight':weight,'--width':width,'--optical':optical,'--intensity':intensity/100})}>
+        <div className={styles['poster-top']} aria-hidden="true"><span>CUT FROM<br/>THE CRUMB.</span><span>{toastPhase === 'fresh' ? 'FRESH' : toastPhase === 'baking' ? 'IN THE OVEN' : 'CHARRED'}<br/>№ 00{index+1}</span></div>
         <div ref={artRef} className={styles.art} aria-hidden="true">{!raw?<div className={styles['empty-note']}>{t.empty}</div>:mode==='circle'?Array.from({length:ringCount},(_,j)=>{const chunk=circleChars.slice(j*chunkSize,(j+1)*chunkSize);return <div key={j} className={styles['orbit-ring']} style={variables({'--count':chunk.length,'--ring':j})}>{glyphs(chunk.join(''))}</div>}):<div ref={compositionRef} className={styles.composition} style={variables({'--font-size':fontSize+'cqw'})}>{lines.map((line,i)=><span key={i} className={styles['type-line']}>{glyphs(line,i*3)}</span>)}</div>}</div>
-        <div className={styles['poster-bottom']} aria-hidden="true"><span>{mode === 'cutout' ? <>SOURDOUGH LETTERS<br/>VARIABLE TYPE / CSS</> : <>BRICOLAGE GROTESQUE<br/>VARIABLE TYPE / CSS</>}</span><span className={styles['poster-symbol']}>✳</span><span>MAKE SOME NOISE<br/>BREAK A FEW RULES.</span></div>
-      </div><div className={styles['work-bottom']}><span role="status" aria-live="polite">{t.notes[index]}</span><span>{mode === 'cutout' ? 'BREAD / OPEN CRUMB' : `CSS TRANSFORMS / 00${index+1}`}</span></div><div className={styles['under-poster']}><p>{t.same}<br/><em>{t.different}</em></p><button type="button" onClick={()=>window.print()}>{t.print} <span aria-hidden="true">↗</span></button></div>
+        <div className={styles['poster-bottom']} aria-hidden="true"><span>SOURDOUGH LETTERS<br/>BREAD TYPE / CSS</span><span className={styles['poster-symbol']}>✳</span><span>MAKE SOME NOISE<br/>BREAK A FEW RULES.</span></div>
+      </div><div className={styles['work-bottom']}><span role="status" aria-live="polite">{toastPhase === 'burnt' ? (language === 'zh' ? '焦黑斑块已经烤进面包字；点击“恢复原味”可以重来。' : 'Charred patches have baked into the bread. Choose “Fresh again” to reset.') : t.notes[index]}</span><span>{toastPhase === 'burnt' ? 'BREAD / CHARRED CRUMB' : 'BREAD / OPEN CRUMB'}</span></div><div className={styles['under-poster']}><p>{t.same}<br/><em>{t.different}</em></p><button type="button" onClick={()=>window.print()}>{t.print} <span aria-hidden="true">↗</span></button></div>
     </div></main><footer><span>TYPOGRAPHY—EXPERIMENTS</span><span>{t.foot}</span><span>001 / CSS TYPE</span></footer>
   </div>;
 }

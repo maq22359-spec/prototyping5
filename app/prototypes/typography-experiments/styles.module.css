@@ -20,23 +20,23 @@
 }
 
 /* Bread cutouts: one photo crop per glyph, with CSS pores and a rough crust edge. */
-.root .cutout[data-palette=acid] {--bg:#000;--ink:#c9a47a;}
-.root .cutout .poster-top,.root .cutout .poster-bottom {color:#b99670;}
-.root .cutout .art {inset:13% 5% 14%;perspective:750px;}
-.root .cutout .composition {line-height:1.34;letter-spacing:0;font-weight:800;}
-.root .cutout .type-line {display:flex;justify-content:center;align-items:center;gap:.09em;min-height:1.3em;white-space:nowrap;}
-.root .cutout .breadSprite {display:inline-block;flex:none;width:var(--sprite-width);height:var(--sprite-height);background-image:url('./assets/bread-alphabet.jpg');background-size:8.6em 8.793333em;background-position:var(--sprite-x) var(--sprite-y);background-repeat:no-repeat;mix-blend-mode:screen;filter:contrast(1.6) saturate(.94) brightness(1.08);mask-image:linear-gradient(to right,transparent,#000 3px,#000 calc(100% - 3px),transparent),linear-gradient(to bottom,transparent,#000 3px,#000 calc(100% - 3px),transparent);mask-composite:intersect;transform:rotate(calc(var(--turn)*var(--intensity)));}
-.root .cutout.moving .breadSprite {animation:breadSpriteFloat 4.8s ease-in-out infinite;animation-delay:calc(var(--i)*-180ms);}
+.root .poster {--bg:#000;--ink:#c9a47a;}
+.root .poster .poster-top,.root .poster .poster-bottom {color:#b99670;}
+.root .poster .art {inset:13% 5% 14%;perspective:750px;}
+.root .poster .composition {line-height:1.34;letter-spacing:0;font-weight:800;}
+.root .poster .type-line {display:flex;justify-content:center;align-items:center;gap:.09em;min-height:1.3em;white-space:nowrap;}
+.root .poster .breadSprite {display:inline-block;flex:none;width:var(--sprite-width);height:var(--sprite-height);background-image:url('./assets/bread-alphabet.jpg');background-size:8.6em 8.793333em;background-position:var(--sprite-x) var(--sprite-y);background-repeat:no-repeat;mix-blend-mode:screen;filter:contrast(1.6) saturate(.94) brightness(1.08);mask-image:linear-gradient(to right,transparent,#000 3px,#000 calc(100% - 3px),transparent),linear-gradient(to bottom,transparent,#000 3px,#000 calc(100% - 3px),transparent);mask-composite:intersect;transform:rotate(calc(var(--turn)*var(--intensity)));}
+.root .poster.moving .breadSprite {animation:breadSpriteFloat 4.8s ease-in-out infinite;animation-delay:calc(var(--i)*-180ms);}
 @keyframes breadSpriteFloat {0%,100% {transform:translateY(0) rotate(calc(var(--turn)*var(--intensity)));}50% {transform:translateY(-.035em) rotate(calc(var(--turn)*var(--intensity) + 2deg));}}
-.root .cutout .glyph {position:relative;display:inline-block;flex:none;color:#654229;background:none;background-clip:border-box;-webkit-background-clip:border-box;-webkit-text-stroke:.005em #bb8859;text-shadow:1px 1px 0 #b77a49,2px 2px 0 #9a6036,3px 3px 0 #754427,5px 6px 0 #4b2918,8px 10px 7px #000b;filter:none;transform:translateY(var(--rise)) rotate(calc(var(--turn)*var(--intensity))) skewX(calc(var(--shear)*var(--intensity))) scaleX(var(--stretch));transform-style:flat;clip-path:polygon(4% 0,27% 1%,47% 0,75% 2%,100% 5%,98% 27%,100% 58%,97% 85%,93% 100%,72% 98%,45% 100%,23% 97%,4% 100%,0 77%,2% 47%,0 18%);}
-.root .cutout .glyph:nth-child(3n+2) {clip-path:polygon(2% 5%,23% 0,53% 2%,78% 0,98% 4%,100% 36%,97% 62%,100% 93%,77% 100%,49% 98%,20% 100%,0 94%,3% 65%,0 38%);}
-.root .cutout .glyph:nth-child(4n+3) {clip-path:polygon(4% 0,36% 2%,64% 0,96% 3%,100% 22%,97% 49%,100% 81%,94% 98%,58% 100%,31% 97%,3% 100%,0 73%,2% 39%);}
-.root .cutout .cjkGlyph {color:#714a2c;font-weight:750;-webkit-text-stroke:0;text-shadow:1px 1px 0 #755036,3px 3px 3px #0009;clip-path:none;}
-.root .cutout .cjkGlyph::before {-webkit-text-stroke:0;}
-.root .cutout .cjkGlyph::after {opacity:.54;}
-.root .cutout .glyph::before,.root .cutout .glyph::after {content:attr(data-char);position:absolute;inset:0;white-space:pre;color:transparent;-webkit-text-fill-color:transparent;background-clip:text;-webkit-background-clip:text;text-shadow:none;pointer-events:none;}
-.root .cutout .glyph::before {background-image:linear-gradient(145deg,#f3ce9255 1%,transparent 28%,#3d1d1066 100%),url('./assets/bread-reference.jpg');background-size:100% 100%,480% auto;background-position:center,var(--photo-x) var(--photo-y);background-repeat:no-repeat;filter:sepia(.9) saturate(.82) contrast(1.24) brightness(1.13);-webkit-text-stroke:.009em #efcb9555;transform:translate(-.5px,-.7px);}
-.root .cutout .glyph::after {background-image:
+.root .poster .glyph {position:relative;display:inline-block;flex:none;color:#654229;background:none;background-clip:border-box;-webkit-background-clip:border-box;-webkit-text-stroke:.005em #bb8859;text-shadow:1px 1px 0 #b77a49,2px 2px 0 #9a6036,3px 3px 0 #754427,5px 6px 0 #4b2918,8px 10px 7px #000b;filter:none;transform:translateY(var(--rise)) rotate(calc(var(--turn)*var(--intensity))) skewX(calc(var(--shear)*var(--intensity))) scaleX(var(--stretch));transform-style:flat;clip-path:polygon(4% 0,27% 1%,47% 0,75% 2%,100% 5%,98% 27%,100% 58%,97% 85%,93% 100%,72% 98%,45% 100%,23% 97%,4% 100%,0 77%,2% 47%,0 18%);}
+.root .poster .glyph:nth-child(3n+2) {clip-path:polygon(2% 5%,23% 0,53% 2%,78% 0,98% 4%,100% 36%,97% 62%,100% 93%,77% 100%,49% 98%,20% 100%,0 94%,3% 65%,0 38%);}
+.root .poster .glyph:nth-child(4n+3) {clip-path:polygon(4% 0,36% 2%,64% 0,96% 3%,100% 22%,97% 49%,100% 81%,94% 98%,58% 100%,31% 97%,3% 100%,0 73%,2% 39%);}
+.root .poster .cjkGlyph {color:#714a2c;font-weight:750;-webkit-text-stroke:0;text-shadow:1px 1px 0 #755036,3px 3px 3px #0009;clip-path:none;}
+.root .poster .cjkGlyph::before {-webkit-text-stroke:0;}
+.root .poster .cjkGlyph::after {opacity:.54;}
+.root .poster .glyph::before,.root .poster .glyph::after {content:attr(data-char);position:absolute;inset:0;white-space:pre;color:transparent;-webkit-text-fill-color:transparent;background-clip:text;-webkit-background-clip:text;text-shadow:none;pointer-events:none;}
+.root .poster .glyph::before {background-image:linear-gradient(145deg,#f3ce9255 1%,transparent 28%,#3d1d1066 100%),url('./assets/bread-reference.jpg');background-size:100% 100%,480% auto;background-position:center,var(--photo-x) var(--photo-y);background-repeat:no-repeat;filter:sepia(.9) saturate(.82) contrast(1.24) brightness(1.13);-webkit-text-stroke:.009em #efcb9555;transform:translate(-.5px,-.7px);}
+.root .poster .glyph::after {background-image:
   radial-gradient(ellipse 24% 17% at var(--p1x) var(--p1y),#27170e 0 32%,#67452b 47%,#bd8a57 64%,transparent 82%),
   radial-gradient(ellipse 16% 24% at var(--p2x) var(--p2y),#29180e 0 34%,#755036 50%,#d6ab73 67%,transparent 84%),
   radial-gradient(ellipse 19% 13% at var(--p3x) var(--p3y),#2e1b10 0 29%,#805736 52%,#d7a879 67%,transparent 83%),
@@ -44,10 +44,36 @@
   radial-gradient(ellipse 8% 7% at 16% 68%,#3c2416 0 38%,#b48050 65%,transparent 85%),
   radial-gradient(ellipse 7% 9% at 80% 16%,#392216 0 36%,#ac7c4c 64%,transparent 86%),
   radial-gradient(ellipse 6% 5% at 70% 78%,#4e2d1c 0 40%,transparent 88%);opacity:.93;}
-.root .cutout.moving .glyph {animation:breadFloat 4.8s ease-in-out infinite;animation-delay:calc(var(--i)*-180ms);}
+.root .poster.moving .glyph {animation:breadFloat 4.8s ease-in-out infinite;animation-delay:calc(var(--i)*-180ms);}
 @keyframes breadFloat {0%,100% {transform:translateY(var(--rise)) rotate(calc(var(--turn)*var(--intensity))) skewX(calc(var(--shear)*var(--intensity))) scaleX(var(--stretch));}50% {transform:translateY(calc(var(--rise) - .045em)) rotate(calc(var(--turn)*var(--intensity) + 2deg)) skewX(calc(var(--shear)*var(--intensity))) scaleX(var(--stretch));}}
 .root .treatments {grid-template-columns:repeat(2,minmax(0,1fr));}
 .root .treatments button:first-child {grid-column:1 / -1;min-height:74px;background:linear-gradient(110deg,#f5ead8,#e8d7b9);}
 .root .treatments button:first-child[aria-pressed=true] {border-color:#8a5438;box-shadow:inset 0 0 0 1px #8a5438;}
-@media(max-width:760px) {.root .cutout .art {inset:13% 4% 14%;}.root .cutout .type-line {gap:.055em;}}
-@media print {.root .cutout .glyph {animation:none!important;}}
+@media(max-width:760px) {.root .poster .art {inset:13% 4% 14%;}.root .poster .type-line {gap:.055em;}}
+@media print {.root .poster .glyph {animation:none!important;}}
+
+/* Every layout moves the same photographed bread letters. */
+.root .poster {--bg:#000;--ink:#c9a47a;}
+.root .poster .breadSprite {position:relative;}
+.root .wave .breadSprite,.root .wave .glyph {--phase:calc(var(--i)*55deg);transform:translateY(calc(sin(var(--phase))*var(--intensity)*.31em)) rotate(calc(cos(var(--phase))*var(--intensity)*18deg)) scaleY(calc(1 + sin(var(--phase))*var(--intensity)*.23));}
+.root .wave.moving .breadSprite,.root .wave.moving .glyph {animation:breadWave 2.7s ease-in-out infinite;animation-delay:calc(var(--i)*-130ms);}
+@keyframes breadWave {0%,100% {transform:translateY(calc(-.22em*var(--intensity))) rotate(calc(-14deg*var(--intensity)));}50% {transform:translateY(calc(.22em*var(--intensity))) rotate(calc(14deg*var(--intensity)));}}
+.root .circle .orbit-ring {--orbit:calc((25 - var(--ring)*6)*1cqw);font-size:min(10cqw,calc(145cqw/var(--count)));}
+.root .circle .breadSprite {position:absolute;left:50%;top:50%;margin-left:calc(var(--sprite-width)*-.5);margin-top:calc(var(--sprite-height)*-.5);transform:rotate(calc(var(--i)*360deg/var(--count))) translateY(calc(-1*var(--orbit))) rotate(calc(var(--intensity)*12deg));}
+.root .circle .glyph {position:absolute;left:50%;top:50%;width:1em;height:1em;margin:-.5em;text-align:center;line-height:1;transform:rotate(calc(var(--i)*360deg/var(--count))) translateY(calc(-1*var(--orbit))) rotate(calc(var(--intensity)*12deg));}
+.root .circle .art::after {content:none;}
+.root .skew .breadSprite {filter:contrast(1.6) saturate(.94) brightness(1.08) drop-shadow(.015em .035em 0 #6c3a1b);}
+
+/* The burnt image keeps the exact alphabet layout and crossfades over the fresh photo. */
+.root .poster .breadSprite::before {content:'';position:absolute;inset:0;pointer-events:none;background-image:url('./assets/bread-alphabet-charred.png');background-size:8.6em 8.793333em;background-position:var(--sprite-x) var(--sprite-y);background-repeat:no-repeat;opacity:0;transition:opacity 2.6s ease;}
+.root .poster.baking .breadSprite::before,.root .poster.burnt .breadSprite::before {opacity:1;}
+.root .poster.baking .glyph,.root .poster.burnt .glyph {filter:sepia(.8) saturate(.6) contrast(1.9) brightness(.55);transition:filter 2.6s ease;}
+.root .poster .glyph {transition:filter 2.6s ease;}
+
+.root .toastButton {display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:46px;margin-top:25px;border:1px solid #4c2a1b;background:#322015;color:#fff0d8;font:600 13px Bricolage,sans-serif;letter-spacing:.02em;transition:background .2s,transform .2s;}
+.root .toastButton:hover:not(:disabled) {background:#66351b;transform:translateY(-1px);}
+.root .toastButton[aria-pressed=true] {background:#1d1310;}
+.root .toastButton:disabled {cursor:progress;opacity:.78;}
+.root .toastButton span {font-size:20px;line-height:1;color:#efa657;}
+.root .toastHint {margin:8px 0 0;color:#77776d;font-size:11px;line-height:1.4;}
+@media(prefers-reduced-motion:reduce) {.root .poster .breadSprite::before,.root .poster .glyph {transition:none;}}
