@@ -4,8 +4,8 @@ import BubbleChainGame from './BubbleChainGame';
 import styles from './styles.module.css';
 
 export const metadata: Metadata = {
-  title: 'Bubble Chain — MA QIANYI / Kate',
-  description: 'One tap. One ripple. Can you pop every bubble?',
+  title: 'Bubble Rush — MA QIANYI / Kate',
+  description: 'Swipe the orbs, feed the core, and watch it grow.',
 };
 
 export default function BubbleChainPage() {
@@ -17,9 +17,9 @@ export default function BubbleChainPage() {
       </header>
 
       <section className={styles.intro} aria-labelledby="game-title">
-        <div className={styles.eyebrow}><span className={styles.eyebrowDot} /> A LITTLE EXPERIMENT · 05</div>
-        <h1 id="game-title">A little <em>chain reaction.</em></h1>
-        <p>One little tap can change everything. Choose a bubble, watch the ripples travel, and try to pop them all.</p>
+        <div className={styles.eyebrow}><span className={styles.eyebrowDot} /> KATE'S ARCADE · GAME 01</div>
+        <h1 id="game-title">BUBBLE <em>RUSH.</em></h1>
+        <p>Swipe into the glowing orbs. Send them flying toward the center and grow the core before the clock runs out.</p>
       </section>
 
       <BubbleChainGame />
