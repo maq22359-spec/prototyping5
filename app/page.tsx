@@ -10,6 +10,7 @@ const prototypes = [
   {title: 'Getting started', description: 'A place for the next idea.', path: '/prototypes/example'},
   {title: 'Confetti button', description: 'A little moment of joy.', path: '/prototypes/confetti-button'},
   {title: 'Typography experiments / 字体实验', description: 'Shape your words with CSS. 用 CSS 探索文字的形状。', path: '/prototypes/typography-experiments'},
+  {title: 'Bubble Chain / 泡泡连锁', description: 'One tap. One ripple. Can you pop them all?', path: '/prototypes/bubble-chain'},
 ];
 
 export default function Home() {
