@@ -1,11 +1,215 @@
-.page { position: relative; min-height: 400vh; color: #e9ebf7; background: radial-gradient(circle at 50% 40%, #252b43 0%, #111522 56%, #090b13 100%); }
-.canvasLayer { position: fixed; inset: 0; z-index: 0; width: 100vw; height: 100vh; pointer-events: none; }
-.canvasLayer canvas { position: fixed; inset: 0; display: block; width: 100vw; height: 100vh; pointer-events: none; }
-.header { position: absolute; z-index: 2; top: 0; left: 0; right: 0; display: flex; align-items: center; justify-content: space-between; padding: 32px 5vw; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
-.header a { color: inherit; text-decoration: none; }
-.header a:hover, .header a:focus-visible { text-decoration: underline; }
-.step { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; width: 100%; min-height: 100vh; padding: 10vh 5vw; pointer-events: none; }
-.step p { margin: 0 0 18px; font-size: 11px; letter-spacing: .22em; }
-.step h1, .step h2 { max-width: 8ch; margin: 0 0 20px; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(44px, 6vw, 94px); font-weight: 400; line-height: .95; }
-.step span { max-width: 25rem; color: #c5c9d9; font-size: 12px; line-height: 1.6; }
-@media (max-width: 700px) { .header { padding: 24px 6vw; font-size: 9px; } .step { padding: 10vh 6vw; justify-content: flex-end; padding-bottom: 14vh; } .step h1, .step h2 { font-size: clamp(42px, 12vw, 68px); } }
+.page {
+  position: relative;
+  min-height: 520vh;
+  color: #f1f3fa;
+  background: radial-gradient(ellipse at 50% 40%, #454448 0%, #363639 34%, #252629 68%, #111215 100%);
+  overflow-x: hidden;
+}
+
+.canvasLayer {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+}
+
+.canvasLayer canvas {
+  position: fixed;
+  inset: 0;
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+}
+
+/* 2.5D Dolly Zoom Container: Smoothly pulls back from face to full body */
+.heroDolly {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.dollyWrapper {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  transform-origin: 50% 40%;
+  will-change: transform;
+}
+
+/* The Close-up Gaze Face */
+.gazePortrait {
+  position: absolute;
+  left: 59%;
+  top: 0;
+  transform: translateX(-50%);
+  height: 100%;
+  width: auto;
+  max-width: none;
+  display: block;
+  user-select: none;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 5%, #000 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 5%, #000 100%);
+  will-change: opacity;
+}
+
+.shoulderPlate {
+  position: absolute;
+  left: 59%;
+  top: 13%;
+  height: 110%;
+  width: auto;
+  max-width: none;
+  display: block;
+  user-select: none;
+  will-change: opacity;
+}
+
+.shoulderLeft {
+  transform: translateX(calc(-50% + 8.3svh)) scaleX(0.85);
+  clip-path: inset(0 50% 0 0);
+}
+
+.shoulderRight {
+  transform: translateX(calc(-50% - 8.3svh)) scaleX(0.85);
+  clip-path: inset(0 0 0 50%);
+}
+
+.sourceVideo {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* The Full Body emerging as camera pulls back */
+.fullBodyImage {
+  position: absolute;
+  top: 15vh;
+  left: 59%;
+  transform: translateX(-50%);
+  height: 75vh;
+  width: auto;
+  max-width: none;
+  display: block;
+  user-select: none;
+  pointer-events: none;
+  opacity: 0;
+  will-change: opacity;
+  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.7));
+}
+
+.header {
+  position: fixed;
+  z-index: 20;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30px 5vw;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  background: linear-gradient(to bottom, rgba(5, 7, 12, 0.75) 0%, transparent 100%);
+  backdrop-filter: blur(8px);
+}
+
+.header a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.header a:hover,
+.header a:focus-visible {
+  text-decoration: underline;
+}
+
+.step {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  min-height: 125vh;
+  padding: 10vh 6vw;
+  pointer-events: none;
+}
+
+.step p {
+  margin: 0 0 16px;
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  color: #79a7ff;
+  font-family: monospace;
+}
+
+.step h1,
+.step h2 {
+  max-width: 10ch;
+  margin: 0 0 18px;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(48px, 6.5vw, 98px);
+  font-weight: 400;
+  line-height: 0.95;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.7);
+}
+
+.step span {
+  max-width: 28rem;
+  color: #c0c6dc;
+  font-size: 13px;
+  line-height: 1.7;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.9);
+}
+
+.scrollCue {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #9cb4dd;
+  pointer-events: none;
+  animation: pulse 2.4s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.45; transform: translate(-50%, 0); }
+  50% { opacity: 1; transform: translate(-50%, 4px); }
+}
+
+@media (max-width: 760px) {
+  .header { padding: 22px 6vw; font-size: 9px; }
+  .step { padding: 10vh 6vw; justify-content: flex-end; padding-bottom: 16vh; }
+  .step h1, .step h2 { font-size: clamp(40px, 11vw, 64px); }
+  .gazePortrait { left: 50%; }
+  .shoulderPlate { left: 50%; }
+  .fullBodyImage { left: 50%; }
+}
+
+
+
