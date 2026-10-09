@@ -12,7 +12,7 @@ const prototypes = [
   {title: 'Typography experiments / 字体实验', description: 'Shape your words with CSS. 用 CSS 探索文字的形状。', path: '/prototypes/typography-experiments'},
   {title: 'Bubble Rush / 泡泡冲撞', description: 'Swipe the orbs, feed the core, beat the clock.', path: '/prototypes/bubble-chain'},
   {title: 'Weather, now / 天气此刻', description: 'Live local weather and a five-day forecast. 实时天气与未来五天预报。', path: '/prototypes/local-weather'},
-  {title: 'Ditto Data Lab / 百变怪数据实验室', description: 'See how an API turns JSON into an interactive page. 看 API 如何把数据变成互动页面。', path: '/prototypes/ditto-lab'},
+  {title: 'PokéAPI Data Lab / 宝可梦 API 实验室', description: 'Change a Pokémon name and see the request, JSON, and page change. 改一个名字，看数据和页面一起变化。', path: '/prototypes/ditto-lab'},
 ];
 
 export default function Home() {

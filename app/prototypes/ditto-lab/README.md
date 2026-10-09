@@ -1,8 +1,8 @@
-# Ditto Data Lab / 百变怪数据实验室
+# PokéAPI Data Lab / 宝可梦 API 实验室
 
-This bilingual prototype fetches the [PokéAPI Ditto endpoint](https://pokeapi.co/api/v2/pokemon/ditto) in the browser. It turns the returned JSON into artwork, two forms, facts, abilities, and stats. Expand the JSON panel to see the response behind the interface. No API key is needed.
+This bilingual prototype starts with the [PokéAPI Ditto endpoint](https://pokeapi.co/api/v2/pokemon/ditto). Edit the Pokémon name at the end of the request URL or choose an example. The page fetches new JSON and redraws its artwork, facts, abilities, and stats. The form switches between images already in the response. Expand the JSON panel to see where the data came from. This is a read-only API demonstration; it does not change PokéAPI's database. No API key is needed.
 
-这个中英文原型在浏览器中请求 [PokéAPI 百变怪接口](https://pokeapi.co/api/v2/pokemon/ditto)，把返回的 JSON 变成图片、两种形态、资料、特性和能力值。展开 JSON 区域可以看到页面背后的数据。这个 API 不需要密钥。
+这个中英文原型从 [PokéAPI 百变怪接口](https://pokeapi.co/api/v2/pokemon/ditto) 开始。修改网址最后的宝可梦名字或选择例子，页面就会请求新的 JSON，并更新图片、资料、特性和能力值。形态按钮只切换返回数据里已有的图片。展开 JSON 区域可查看数据来源。这个页面只能读取数据，不能修改 PokéAPI 的数据库；也不需要密钥。
 
 ## Run locally / 本地运行
 
