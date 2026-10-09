@@ -11,6 +11,7 @@ const prototypes = [
   {title: 'Confetti button', description: 'A little moment of joy.', path: '/prototypes/confetti-button'},
   {title: 'Typography experiments / 字体实验', description: 'Shape your words with CSS. 用 CSS 探索文字的形状。', path: '/prototypes/typography-experiments'},
   {title: 'Bubble Rush / 泡泡冲撞', description: 'Swipe the orbs, feed the core, beat the clock.', path: '/prototypes/bubble-chain'},
+  {title: 'Weather, now / 天气此刻', description: 'Live local weather and a five-day forecast. 实时天气与未来五天预报。', path: '/prototypes/local-weather'},
 ];
 
 export default function Home() {
