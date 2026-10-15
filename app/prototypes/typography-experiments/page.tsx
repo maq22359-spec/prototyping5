@@ -122,6 +122,9 @@ export default function TypographyExperiments() {
       <span className={`${styles.breadPiece} ${styles.breadPieceTwo}`}/>
       <span className={`${styles.breadPiece} ${styles.breadPieceThree}`}/>
       <span className={`${styles.breadPiece} ${styles.breadPieceFour}`}/>
+      <span className={`${styles.breadPiece} ${styles.breadPieceFive}`}/>
+      <span className={`${styles.breadPiece} ${styles.breadPieceSix}`}/>
+      <span className={`${styles.breadPiece} ${styles.breadPieceSeven}`}/>
     </div>
     <header><Link href="/" className={styles.brand}><span className={styles.logo}>t<span>e</span></span><span>typography<span className={styles['brand-bottom']}>experiments</span></span></Link><Link href="/#playground" className={styles.backLink}>← {t.back}</Link><button type="button" className={styles.language} onClick={() => setLanguage(language === 'zh' ? 'en' : 'zh')} aria-label="Switch between Chinese and English">中文 <span aria-hidden="true">/</span> EN</button></header>
     <main><aside><div className={styles.eyebrow}>{t.eyebrow}</div><h1>{t.title.split('\n').map((line,i)=><span key={i}>{line}{i===0&&<br/>}</span>)}</h1>
