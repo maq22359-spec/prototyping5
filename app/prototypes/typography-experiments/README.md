@@ -19,8 +19,8 @@ From the project root, run `npm run dev`, then open `/prototypes/typography-expe
 - Switch between Chinese and English, adjust the variable font and distortion, toggle motion, or print the poster.
   可切换中英文、调整可变字体与变形程度、开关动态效果，或打印海报。
 
-For A–Z, CSS positions the exact hand-cut bread letters from the supplied alphabet reference inside responsive letter spans. A second, image-generated version of that same alphabet adds photographic black char and dark amber crust; CSS fades between the two images. Chinese and unsupported characters use the supplied bread photograph as a CSS text fill, with varied gradient pores, clipping and layered shadows. The black background follows the original reference. No graphics or animation library is used by this prototype.
-对于 A–Z，CSS 会在响应式字母容器里定位用户参考图中原本的面包字母；另一张由图像生成工具制作的同版字母照片提供焦黑斑块和深琥珀色表皮，CSS 在两张图片之间过渡。中文与其他未收录字符仍使用用户提供的面包照片作为 CSS 字形填充，并叠加渐变气孔、裁切和阴影。黑色背景呼应最初的参考图。本原型不使用图形或动画库。
+For A–Z, CSS positions the exact hand-cut bread letters from the supplied alphabet reference inside responsive letter spans. A second, image-generated version of that same alphabet adds photographic black char and dark amber crust; CSS fades between the two images. Chinese and unsupported characters use the supplied bread photograph as a CSS text fill, with varied gradient pores, clipping and layered shadows. The entire page uses a consistent black theme with small crumbs and a few larger CSS bread pieces behind the content. No graphics or animation library is used by this prototype.
+对于 A–Z，CSS 会在响应式字母容器里定位用户参考图中原本的面包字母；另一张由图像生成工具制作的同版字母照片提供焦黑斑块和深琥珀色表皮，CSS 在两张图片之间过渡。中文与其他未收录字符仍使用用户提供的面包照片作为 CSS 字形填充，并叠加渐变气孔、裁切和阴影。整页统一为黑色背景，用细小面包碎和几块较大的 CSS 面包块点缀，且这些装饰位于内容后方。本原型不使用图形或动画库。
 
 Bricolage Grotesque is bundled locally with its SIL Open Font License. Its variable axes affect unsupported Latin characters; the photographed A–Z keeps its original shape, and Chinese falls back to a system font. All prototype styles stay in the local CSS Module.
 Bricolage Grotesque 可变字体及其 SIL Open Font License 保存在本地；可变轴作用于未收录的拉丁字符，照片中的 A–Z 保持原始形状，中文使用系统字体。所有样式都保留在原型自己的 CSS Module 中。

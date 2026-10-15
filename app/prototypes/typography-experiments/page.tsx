@@ -117,6 +117,12 @@ export default function TypographyExperiments() {
     });
   }
   return <div className={styles.root} lang={language === 'zh' ? 'zh-CN' : 'en'}>
+    <div className={styles.crumbDecor} aria-hidden="true">
+      <span className={`${styles.breadPiece} ${styles.breadPieceOne}`}/>
+      <span className={`${styles.breadPiece} ${styles.breadPieceTwo}`}/>
+      <span className={`${styles.breadPiece} ${styles.breadPieceThree}`}/>
+      <span className={`${styles.breadPiece} ${styles.breadPieceFour}`}/>
+    </div>
     <header><Link href="/" className={styles.brand}><span className={styles.logo}>t<span>e</span></span><span>typography<span className={styles['brand-bottom']}>experiments</span></span></Link><Link href="/#playground" className={styles.backLink}>← {t.back}</Link><button type="button" className={styles.language} onClick={() => setLanguage(language === 'zh' ? 'en' : 'zh')} aria-label="Switch between Chinese and English">中文 <span aria-hidden="true">/</span> EN</button></header>
     <main><aside><div className={styles.eyebrow}>{t.eyebrow}</div><h1>{t.title.split('\n').map((line,i)=><span key={i}>{line}{i===0&&<br/>}</span>)}</h1>
       <div className={styles['text-label']}><label htmlFor="sentence">{t.input}</label><span>{characters(sentence).length} / 80</span></div><textarea id="sentence" rows={3} value={sentence} spellCheck={false} onChange={event=>setSentence(characters(event.target.value).slice(0,80).join(''))}/><p className={styles.hint}>{t.hint}</p>
