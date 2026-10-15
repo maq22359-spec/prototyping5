@@ -218,16 +218,44 @@
   background: radial-gradient(ellipse 24% 43% at 50% 52%, #000a 0%, #0007 55%, transparent 100%);
 }
 .orbit { position: absolute; z-index: 2; inset: 0; pointer-events: none; }
-.orbitPokemon { position: absolute; display: block; object-fit: contain; filter: drop-shadow(0 18px 20px #080e1bb8); opacity: .94; }
-.orbitCharizard { top: 20%; left: 6%; width: clamp(135px, 15vw, 205px); transform: rotate(-9deg); }
-.orbitButterfree { top: 14%; left: 25%; width: 115px; transform: rotate(12deg); }
-.orbitGengar { top: 52%; left: 3%; width: clamp(130px, 13vw, 185px); transform: rotate(-8deg); }
-.orbitBulbasaur { top: 73%; left: 18%; width: clamp(112px, 12vw, 155px); transform: rotate(8deg); }
-.orbitPikachu { top: 18%; right: 9%; width: clamp(135px, 14vw, 190px); transform: rotate(10deg); }
-.orbitSnorlax { top: 46%; right: 2%; width: clamp(145px, 16vw, 205px); transform: rotate(7deg); }
-.orbitEevee { top: 74%; right: 18%; width: clamp(112px, 12vw, 155px); transform: rotate(-8deg); }
-.orbitLucario { bottom: 5%; right: 30%; width: 120px; transform: rotate(8deg); }
-.orbitPiplup { bottom: 7%; left: 29%; width: 100px; transform: rotate(-8deg); }
+.orbitPokemon { position: absolute; display: block; object-fit: contain; filter: drop-shadow(0 22px 23px #080e1bd0); opacity: .95; }
+.orbitCharizard { top: 21%; left: 2%; width: clamp(170px, 19vw, 260px); transform: rotate(-9deg); }
+.orbitButterfree { top: 11%; left: 18%; width: clamp(105px, 11vw, 145px); transform: rotate(12deg); }
+.orbitGengar { top: 56%; left: 1%; width: clamp(165px, 17vw, 225px); transform: rotate(-8deg); }
+.orbitBulbasaur { bottom: 4%; left: 16%; width: clamp(130px, 14vw, 185px); transform: rotate(8deg); }
+.orbitPikachu { top: 19%; right: 3%; width: clamp(170px, 18vw, 245px); transform: rotate(10deg); }
+.orbitSnorlax { top: 54%; right: 1%; width: clamp(180px, 20vw, 270px); transform: rotate(7deg); }
+.orbitEevee { bottom: 3%; right: 16%; width: clamp(130px, 14vw, 185px); transform: rotate(-8deg); }
+.orbitLucario { bottom: 1%; right: 31%; width: 135px; transform: rotate(8deg); }
+.orbitPiplup { bottom: 1%; left: 30%; width: 115px; transform: rotate(-8deg); }
+.cardFan { position: absolute; z-index: 3; inset: 0; pointer-events: none; }
+.fanCard {
+  position: absolute;
+  top: 278px;
+  left: 50%;
+  width: 236px;
+  height: 370px;
+  padding: 8px;
+  border: 1px solid #d7ad68;
+  border-radius: 15px;
+  background: radial-gradient(circle at 50% 44%, #273268, #131631 58%, #080b20 100%);
+  box-shadow: 0 0 0 2px #161b3d, 0 12px 28px #000a, inset 0 0 0 2px #9a7446;
+  transform-origin: 50% 96%;
+  transform: translateX(-50%) rotate(var(--fan-angle));
+}
+.fanCardFrame {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border: 1px solid #a48659;
+  border-radius: 8px;
+  background: radial-gradient(circle, #9d7c4e33 0 2px, transparent 3px) center / 20px 20px, radial-gradient(circle at 50% 48%, #27315f, transparent 57%);
+}
+.fanCardFrame::before, .fanCardFrame::after { position: absolute; inset: 18px; border: 1px solid #9b7d52a9; border-radius: 50%; content: ""; }
+.fanCardFrame::after { inset: 43px; border-style: dotted; }
+.fanCardSeal { display: grid; place-items: center; width: 77px; height: 77px; border: 1px solid #d5b475; border-radius: 50%; box-shadow: 0 0 0 7px #d2ac5430; color: #e7c582; font-size: 43px; text-shadow: 0 0 15px #efca75; }
 .showcaseHeader { position: relative; z-index: 4; max-width: 720px; margin: 0 auto; color: #fff; text-align: center; }
 .showcaseHeader .eyebrow { justify-content: center; margin-bottom: 8px; color: #b7cde5; font-size: 10px; }
 .showcaseHeader .eyebrow span { color: #f7d568; }
@@ -236,7 +264,9 @@
 .showcaseHeader .intro { max-width: 650px; margin: 12px auto 0; color: #d2deec; font-size: 13px; line-height: 1.5; }
 .showcase .cardGallery { position: relative; z-index: 4; order: 0; width: auto; margin: 20px 0 0; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
 .showcase .galleryLabel { margin-bottom: 14px; color: #dce7f5; text-shadow: 0 1px 8px #030508; }
-.showcase .pokemonCard { width: min(390px, calc(100vw - 46px)); box-shadow: 0 4px 0 #737f7a, 0 22px 60px #000c; }
+.showcase .pokemonCard { width: min(390px, calc(100vw - 46px)); border: 2px solid #d4ad69; background: linear-gradient(145deg, #e7ce91, #514371 20%, #171b3b 48%, #b28b52 82%, #f1d99d); box-shadow: 0 0 0 4px #131933, 0 24px 62px #000e; }
+.showcase .cardInner { border-color: #b6915a; background: linear-gradient(145deg, #ebe0c9, var(--type-pale) 42%, var(--type-main) 100%); }
+.showcase .artFrame { border-color: #d3b777; box-shadow: 0 0 0 1px #775c3b, 0 3px 10px #271b4280; }
 .showcase .formSwitch { border-color: #ffffff4a; background: #09111dbb; }
 .showcase .formSwitch button { color: #dce8f8; }
 .showcase .formSwitch button[aria-pressed="true"] { background: #fff; color: #16202f; }
@@ -247,11 +277,12 @@
 @media (max-width: 980px) {
   .showcase { min-height: 835px; }
   .heroCopy { max-width: none; grid-template-columns: 1fr 1fr; }
-  .orbitCharizard { left: -4%; }
-  .orbitGengar { left: -8%; }
-  .orbitPikachu { right: -3%; }
-  .orbitSnorlax { right: -7%; }
+  .orbitCharizard { left: -8%; }
+  .orbitGengar { left: -11%; }
+  .orbitPikachu { right: -7%; }
+  .orbitSnorlax { right: -11%; }
   .orbitButterfree, .orbitLucario, .orbitPiplup { display: none; }
+  .fanCard { top: 290px; width: 206px; height: 330px; }
 }
 @media (max-width: 700px) {
   .showcase { min-height: 754px; padding: 26px 8px 36px; }
@@ -262,10 +293,14 @@
   .showcase .cardGallery { margin-top: 24px; }
   .showcase .pokemonCard { width: min(340px, calc(100vw - 48px)); }
   .showcase .galleryLabel { font-size: 9px; }
-  .orbitCharizard { top: 22%; left: -52px; width: 135px; }
-  .orbitPikachu { top: 22%; right: -48px; width: 130px; }
-  .orbitBulbasaur { top: 68%; left: -38px; width: 112px; }
-  .orbitEevee { top: 70%; right: -40px; width: 112px; }
+  .fanCard { top: 265px; width: 148px; height: 248px; transform: translateX(-50%) rotate(calc(var(--fan-angle) * .68)); }
+  .fanCardFrame::before { inset: 11px; }
+  .fanCardFrame::after { inset: 28px; }
+  .fanCardSeal { width: 45px; height: 45px; font-size: 26px; }
+  .orbitCharizard { top: 22%; left: -73px; width: 165px; }
+  .orbitPikachu { top: 22%; right: -70px; width: 160px; }
+  .orbitBulbasaur { bottom: 5%; left: -52px; width: 130px; }
+  .orbitEevee { bottom: 5%; right: -52px; width: 130px; }
   .orbitGengar, .orbitSnorlax { display: none; }
   .heroCopy { grid-template-columns: 1fr; padding: 36px 0 52px; }
   .heroCopy .status { grid-column: 1; }
