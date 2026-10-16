@@ -24,33 +24,23 @@ type Pokemon = {
 
 const words = {
   zh: {
-    back: "返回作品集", eyebrow: "改一个名字，观察三个地方变化", title: "PokéAPI 数据实验室",
-    intro: "先看到百变怪 Ditto。试着把名字改成 pikachu：请求网址、API 返回的 JSON 和卡牌都会跟着变。",
+    back: "返回作品集", eyebrow: "换一只宝可梦，卡牌随之变化", title: "PokéAPI 数据实验室",
+    intro: "先看到百变怪 Ditto。试着把名字改成 pikachu：卡牌、属性和能力值都会跟着变。",
     edit: "你可以更改网址最后的宝可梦名字", examples: "挑一只宝可梦", browseHelp: "选分类，再点名字即可换卡牌", ask: "发送请求", asking: "正在请求…", success: "已收到 API 回复", error: "没有收到结果。请检查名字或网络后重试。",
     invalid: "请输入英文名字或编号，例如 pikachu 或 25。", notFound: "API 没找到这个名字，试试下方的例子。",
     normal: "普通形态", shiny: "闪光形态", type: "属性", height: "身高", weight: "体重", abilities: "特性", hidden: "隐藏特性", move: "招式",
     stats: "基础能力值", statsNote: "这些数字来自返回的 stats 数组。百变怪的六项数值刚好相同。", otherStatsNote: "这些数字来自这只宝可梦返回的 stats 数组。",
-    how: "你改了哪里？", step1: "你改请求", step1Body: "把网址末尾的 ditto 改成 pikachu，再按“发送请求”。",
-    step2: "API 决定回答", step2Body: "PokéAPI 根据名字返回另一份 JSON。你不能在这里修改它的数据库。",
-    step3: "网页改变显示", step3Body: "页面读取新 JSON 的 name、sprites 和 stats，换成新的图片与数字。",
-    inputLabel: "你输入的名字", jsonLabel: "API 返回的 name", screenLabel: "卡片显示", readOnly: "“闪光形态”只切换 JSON 里已有的图片；它不会改变 API 的原始数据。",
-    inspect: "展开这次收到的 JSON", inspectBody: "在下面寻找 name、sprites 或 stats，就能看到页面的数据来源。",
-    source: "打开 PokéAPI 原始地址", waiting: "等待 API 回复…", response: "API 回复", responseTime: "耗时", ms: "毫秒",
+    waiting: "等待 API 回复…", response: "API 回复", responseTime: "耗时", ms: "毫秒",
     basic: "基础", cardAbility: "特性", cardMove: "招式", cardNumber: "图鉴编号", cardHint: "卡牌颜色跟随宝可梦变化", cardStats: "来自 API 的能力值",
   },
   en: {
-    back: "Back to portfolio", eyebrow: "CHANGE ONE NAME · WATCH THREE THINGS CHANGE", title: "PokéAPI Data Lab",
-    intro: "Start with Ditto. Change the name to pikachu and watch the request URL, the API's JSON, and the card change together.",
+    back: "Back to portfolio", eyebrow: "CHOOSE A POKÉMON · WATCH THE CARD CHANGE", title: "PokéAPI Data Lab",
+    intro: "Start with Ditto. Change the name to pikachu and watch the card, type, and stats update.",
     edit: "You can edit the Pokémon name at the end of the URL", examples: "Pick a Pokémon", browseHelp: "Choose a type, then a name to change the card", ask: "Send request", asking: "Requesting…", success: "API response received", error: "No result received. Check the name or connection and retry.",
     invalid: "Enter a name or number, such as pikachu or 25.", notFound: "The API could not find that name. Try an example below.",
     normal: "Normal form", shiny: "Shiny form", type: "Type", height: "Height", weight: "Weight", abilities: "Abilities", hidden: "Hidden ability", move: "Move",
     stats: "Base stats", statsNote: "These numbers come from the returned stats array. Ditto happens to have the same value for all six.", otherStatsNote: "These numbers come from this Pokémon's returned stats array.",
-    how: "What did you change?", step1: "You change the request", step1Body: "Change ditto to pikachu at the end of the URL, then press “Send request.”",
-    step2: "The API decides its answer", step2Body: "PokéAPI returns another JSON response. This page cannot edit PokéAPI's database.",
-    step3: "The page changes its display", step3Body: "The page reads name, sprites, and stats from the new JSON to show new art and numbers.",
-    inputLabel: "Name you entered", jsonLabel: "API's returned name", screenLabel: "Card on this page", readOnly: "“Shiny form” only switches between images already in the JSON; it does not change the API's data.",
-    inspect: "Open the returned JSON", inspectBody: "Find name, sprites, or stats below to see where the page gets its data.",
-    source: "Open the PokéAPI endpoint", waiting: "Waiting for API response…", response: "API response", responseTime: "Time", ms: "ms",
+    waiting: "Waiting for API response…", response: "API response", responseTime: "Time", ms: "ms",
     basic: "BASIC", cardAbility: "ABILITY", cardMove: "MOVE", cardNumber: "POKÉDEX NO.", cardHint: "Card colors change with each Pokémon", cardStats: "Stats from the API",
   },
 } as const;
@@ -202,7 +192,6 @@ export default function DittoLab() {
 
   const message = status === "loading" ? t.asking : status === "ready" ? `${t.success} · 200 OK` : t[errorKind === "notFound" ? "notFound" : errorKind === "invalid" ? "invalid" : "error"];
   const previewName = input.trim().toLowerCase() || "…";
-  const currentUrl = endpointBase + (pokemon?.name ?? (/^[a-z0-9-]+$/.test(previewName) ? previewName : "ditto"));
   const visibleGroup = sampleGroups.find(({ type }) => type === selectedGroup) ?? sampleGroups[0];
 
   const artwork = pokemon && (shiny
@@ -314,23 +303,6 @@ export default function DittoLab() {
         </div>
       </section>
 
-      <section className={styles.learn} aria-labelledby="api-explainer">
-        <div className={styles.sectionMeta}><span>02 / API 101</span><span>REQUEST → RESPONSE → INTERFACE</span></div>
-        <h2 id="api-explainer">{t.how}</h2>
-        <div className={styles.pipeline}>
-          <div><small>{t.inputLabel}</small><strong>{previewName}</strong></div><span aria-hidden="true">→</span>
-          <div><small>{t.jsonLabel}</small><strong>{pokemon?.name ?? "—"}</strong></div><span aria-hidden="true">→</span>
-          <div><small>{t.screenLabel}</small><strong>{pokemon ? titleCase(pokemon.name) : "—"}</strong></div>
-        </div>
-        <div className={styles.steps}>
-          <article className={styles.step}><span>01 / ↗</span><h3>{t.step1}</h3><p>{t.step1Body}</p></article>
-          <article className={styles.step}><span>02 / {`{ }`}</span><h3>{t.step2}</h3><p>{t.step2Body}</p></article>
-          <article className={styles.step}><span>03 / ✳</span><h3>{t.step3}</h3><p>{t.step3Body}</p></article>
-        </div>
-        <p className={styles.readOnly}>{t.readOnly}</p>
-        <details className={styles.json}><summary>{t.inspect}<span aria-hidden="true">＋</span></summary><p>{t.inspectBody}</p><pre>{pokemon ? JSON.stringify(pokemon, null, 2) : status === "error" ? t.error : t.asking}</pre></details>
-      </section>
-      <footer className={styles.footer}><span>POKÉAPI LAB · 2026</span><a href={currentUrl} target="_blank" rel="noreferrer">{t.source} ↗</a></footer>
     </div>
   </main>;
 }
