@@ -58,17 +58,11 @@
 .error { color: #a43f3f; }
 .cardGallery { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 0; padding: 26px 24px 24px; border: 1px solid #e2e6df; border-radius: 30px; background: radial-gradient(circle at 50% 42%, var(--type-pale), #ffffff 67%); box-shadow: 0 28px 80px #29372a16; }
 .galleryLabel { align-self: stretch; margin: 0 0 19px; color: #5e6d60; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-align: center; text-transform: uppercase; }
-.pokemonCard { width: min(100%, 390px); padding: 10px; border: 1px solid #7d8988; border-radius: 19px; background: linear-gradient(135deg, #f9fbf9, #a7b0b0 15%, #edf1ee 37%, #87928f 65%, #f8f9f7 92%); box-shadow: 0 4px 0 #737f7a, 0 24px 45px #1c30263a; transform: rotate(-1deg); transition: transform .25s ease; }
+.pokemonCard { width: min(100%, 390px); padding: 10px; border: 5px solid transparent; border-radius: 19px; background: linear-gradient(135deg, #f9fbf9, #a7b0b0 15%, #edf1ee 37%, #87928f 65%, #f8f9f7 92%) padding-box, var(--frame-edge) border-box; box-shadow: 0 4px 0 #737f7a, 0 24px 45px #1c30263a; transform: rotate(-1deg); transition: transform .25s ease; }
 .pokemonCard:hover { transform: rotate(0deg) translateY(-4px); }
-.frameSilver { border-color: #778488; background: linear-gradient(135deg, #fbfffd, #9ca9ad 13%, #eef4f3 31%, #85949a 56%, #f9fcfa 79%, #849399); box-shadow: 0 4px 0 #69777a, 0 24px 45px #1c30263a; }
-.frameYellow { border-color: #bb8f08; background: linear-gradient(135deg, #fff8bd, #d6a510 15%, #fff27c 31%, #e1b71b 58%, #fff7ad 77%, #bb8d0c); box-shadow: 0 4px 0 #9c7511, 0 24px 48px #ad831d4d; }
-.frameYellow .cardInner { border-color: #bd970e; }
-.frameYellow .artFrame { border-color: #f5d646; box-shadow: 0 0 0 1px #a77e16, 0 3px 6px #6b511c55; }
-.frameHolo { border-color: #a1b4c8; background: linear-gradient(115deg, #eff9ff 0%, #f6a5ce 13%, #b5abf1 27%, #80dbed 42%, #f8e5a3 58%, #e79fce 73%, #a5d7ee 88%, #f7fbfd 100%); background-size: 190% 190%; box-shadow: 0 4px 0 #6e8296, 0 24px 52px #5373925c, 0 0 24px #c38ce05c; animation: foilShift 10s ease-in-out infinite alternate; }
-.frameHolo .cardInner { border-color: #91a8b7; }
-.frameHolo .artFrame { border-color: #d6e8ef; box-shadow: 0 0 0 1px #8ca7bb, 0 3px 8px #754e9980; }
-.frameHolo .spriteStage::after { position: absolute; inset: 0; content: ""; pointer-events: none; background: linear-gradient(125deg, transparent 24%, #e2faff4d 37%, #ffc7e43d 48%, transparent 66%); mix-blend-mode: screen; }
-@keyframes foilShift { from { background-position: 0% 45%; } to { background-position: 100% 55%; } }
+.frameSilver { --frame-edge: linear-gradient(135deg, #f6fbfb, #748488 17%, #e9f0ef 34%, #728188 55%, #fff 76%, #859399); }
+.frameYellow { --frame-edge: linear-gradient(135deg, #fff6a8, #bb8706 17%, #ffe95c 34%, #bd8a08 55%, #fff7ad 76%, #aa7900); }
+.frameHolo { --frame-edge: conic-gradient(from 35deg, #9ee9f4, #ffd4e9, #d6b9ff, #fff6b9, #a8f7d9, #9ee9f4, #d6b9ff, #fff6b9, #9ee9f4); }
 .cardInner { overflow: hidden; padding: 8px 10px 7px; border: 1px solid #6f7869; border-radius: 11px; background: linear-gradient(145deg, var(--type-pale), var(--type-main) 56%, var(--type-pale)); color: #223029; }
 .cardTop { display: flex; align-items: flex-end; justify-content: space-between; gap: 8px; min-height: 45px; padding: 0 3px 7px; }
 .cardIdentity { min-width: 0; }
@@ -185,4 +179,4 @@
   .sprite { height: 200px; }
   .stat { grid-template-columns: 67px 1fr 26px; }
 }
-@media (prefers-reduced-motion: reduce) { .sprite, .frameHolo { animation: none; } .pokemonCard, .requestButton { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .sprite { animation: none; } .pokemonCard, .requestButton { transition: none; } }
