@@ -127,7 +127,7 @@ const sampleGroups = [
   ] },
 ] as const;
 
-// Transparent PokéAPI artwork stays outside the tarot-style card fan.
+// Transparent PokéAPI artwork forms the circle behind the currently selected card.
 const orbitPokemon = [
   { id: 6, className: "orbitCharizard" },
   { id: 12, className: "orbitButterfree" },
@@ -248,13 +248,6 @@ export default function DittoLab() {
         <div className={styles.showcase}>
           <div className={styles.orbit} aria-hidden="true">
             {orbitPokemon.map(({ id, className }) => <img key={id} className={`${styles.orbitPokemon} ${styles[className]}`} src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`} alt="" />)}
-          </div>
-          <div className={styles.cardFan} aria-hidden="true">
-            {Array.from({ length: 15 }, (_, index) => (
-              <div key={index} className={styles.fanCard} style={{ "--fan-angle": `${(index - 7) * 9.5}deg` } as CSSProperties}>
-                <span className={styles.fanCardFrame}><span className={styles.fanCardSeal}>✦</span></span>
-              </div>
-            ))}
           </div>
           <div className={styles.showcaseHeader}>
             <p className={styles.eyebrow}><span aria-hidden="true">●</span>{t.eyebrow}</p>
