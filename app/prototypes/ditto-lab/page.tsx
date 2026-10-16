@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState, type CSSProperties, type FormEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties, type FormEvent, type PointerEvent as ReactPointerEvent } from "react";
 import styles from "./styles.module.css";
 
 const endpointBase = "https://pokeapi.co/api/v2/pokemon/";
@@ -31,7 +31,8 @@ const words = {
     normal: "普通形态", shiny: "闪光形态", type: "属性", height: "身高", weight: "体重", abilities: "特性", hidden: "隐藏特性", move: "招式",
     stats: "基础能力值", statsNote: "这些数字来自返回的 stats 数组。百变怪的六项数值刚好相同。", otherStatsNote: "这些数字来自这只宝可梦返回的 stats 数组。",
     waiting: "等待 API 回复…", response: "API 回复", responseTime: "耗时", ms: "毫秒",
-    basic: "基础", cardAbility: "特性", cardMove: "招式", cardNumber: "图鉴编号", cardHint: "卡牌颜色跟随宝可梦变化", cardStats: "来自 API 的能力值",
+    basic: "基础", cardAbility: "特性", cardMove: "招式", cardNumber: "图鉴编号", cardHint: "互动卡牌 · 可翻转旋转", cardStats: "来自 API 的能力值",
+    flipCard: "翻转卡牌", resetCard: "回到正面", dragCard: "拖动卡牌自由旋转，或用滑杆调整角度。", horizontalAngle: "左右旋转", verticalAngle: "上下旋转", cardControls: "卡牌旋转控制",
   },
   en: {
     back: "Back to portfolio", eyebrow: "CHOOSE A POKÉMON · WATCH THE CARD CHANGE", title: "PokéAPI Data Lab",
@@ -41,7 +42,8 @@ const words = {
     normal: "Normal form", shiny: "Shiny form", type: "Type", height: "Height", weight: "Weight", abilities: "Abilities", hidden: "Hidden ability", move: "Move",
     stats: "Base stats", statsNote: "These numbers come from the returned stats array. Ditto happens to have the same value for all six.", otherStatsNote: "These numbers come from this Pokémon's returned stats array.",
     waiting: "Waiting for API response…", response: "API response", responseTime: "Time", ms: "ms",
-    basic: "BASIC", cardAbility: "ABILITY", cardMove: "MOVE", cardNumber: "POKÉDEX NO.", cardHint: "Card colors change with each Pokémon", cardStats: "Stats from the API",
+    basic: "BASIC", cardAbility: "ABILITY", cardMove: "MOVE", cardNumber: "POKÉDEX NO.", cardHint: "Interactive card · flip and rotate", cardStats: "Stats from the API",
+    flipCard: "Flip card", resetCard: "Show front", dragCard: "Drag the card to rotate freely, or use the angle sliders.", horizontalAngle: "Turn left / right", verticalAngle: "Tilt up / down", cardControls: "Card rotation controls",
   },
 } as const;
 
@@ -128,6 +130,12 @@ function titleCase(value: string) {
   return value.replaceAll("-", " ").replace(/\b\w/g, (character) => character.toUpperCase());
 }
 
+function dialAngle(angle: number) {
+  const rounded = Math.round(angle);
+  const wrapped = ((rounded % 360) + 360) % 360;
+  return wrapped === 0 && rounded !== 0 ? 360 : wrapped;
+}
+
 export default function DittoLab() {
   const [language, setLanguage] = useState<Language>("zh");
   const [input, setInput] = useState("ditto");
@@ -136,8 +144,11 @@ export default function DittoLab() {
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
   const [errorKind, setErrorKind] = useState<"invalid" | "notFound" | "network">("network");
   const [shiny, setShiny] = useState(false);
+  const [rotation, setRotation] = useState({ x: 0, y: 0 });
+  const [dragging, setDragging] = useState(false);
   const [elapsed, setElapsed] = useState<number | null>(null);
   const sequence = useRef(0);
+  const cardDrag = useRef<{ pointerId: number; x: number; y: number } | null>(null);
   const t = words[language];
 
   const load = useCallback(async (rawName: string) => {
@@ -145,6 +156,7 @@ export default function DittoLab() {
     const name = rawName.trim().toLowerCase();
     setPokemon(null);
     setShiny(false);
+    setRotation({ x: 0, y: 0 });
     setElapsed(null);
     if (!/^[a-z0-9-]+$/.test(name)) {
       setErrorKind("invalid");
@@ -188,6 +200,29 @@ export default function DittoLab() {
   function select(name: string) {
     setInput(name);
     void load(name);
+  }
+
+  function startCardDrag(event: ReactPointerEvent<HTMLDivElement>) {
+    if (!event.isPrimary || (event.pointerType === "mouse" && event.button !== 0)) return;
+    event.currentTarget.setPointerCapture(event.pointerId);
+    cardDrag.current = { pointerId: event.pointerId, x: event.clientX, y: event.clientY };
+    setDragging(true);
+  }
+
+  function moveCardDrag(event: ReactPointerEvent<HTMLDivElement>) {
+    const previous = cardDrag.current;
+    if (!previous || previous.pointerId !== event.pointerId) return;
+    const dx = event.clientX - previous.x;
+    const dy = event.clientY - previous.y;
+    cardDrag.current = { ...previous, x: event.clientX, y: event.clientY };
+    setRotation(({ x, y }) => ({ x: x - dy, y: y + dx }));
+  }
+
+  function stopCardDrag(event: ReactPointerEvent<HTMLDivElement>) {
+    if (cardDrag.current?.pointerId !== event.pointerId) return;
+    cardDrag.current = null;
+    setDragging(false);
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
   }
 
   const message = status === "loading" ? t.asking : status === "ready" ? `${t.success} · 200 OK` : t[errorKind === "notFound" ? "notFound" : errorKind === "invalid" ? "invalid" : "error"];
@@ -254,22 +289,49 @@ export default function DittoLab() {
         </div>
         <div className={styles.cardGallery}>
           <p className={styles.galleryLabel}>✦ {t.cardHint}</p>
-          <div className={`${styles.pokemonCard} ${frameFinish}`} aria-label={`${pokemon ? titleCase(pokemon.name) : "Pokémon"} card`}>
-            <div className={styles.cardInner}>
-              <div className={styles.cardTop}>
-                <div className={styles.cardIdentity}><span className={styles.cardBasic}>{t.basic}</span><strong>{pokemon ? titleCase(pokemon.name) : "—"}</strong></div>
-                <div className={styles.cardHp}><small>HP</small><strong>{hp ?? "—"}</strong><span aria-hidden="true">✦</span></div>
+          <div className={styles.cardStage}>
+            <div
+              className={`${styles.cardRotator} ${dragging ? styles.cardDragging : ""}`}
+              style={{ "--rotate-x": `${rotation.x}deg`, "--rotate-y": `${rotation.y}deg` } as CSSProperties}
+              onPointerDown={startCardDrag}
+              onPointerMove={moveCardDrag}
+              onPointerUp={stopCardDrag}
+              onPointerCancel={stopCardDrag}
+              onLostPointerCapture={stopCardDrag}
+              role="group"
+              aria-label={`${pokemon ? titleCase(pokemon.name) : "Pokémon"} card`}
+              aria-describedby="card-drag-hint"
+            >
+              <div className={`${styles.pokemonCard} ${frameFinish}`}>
+                <div className={styles.cardInner}>
+                  <div className={styles.cardTop}>
+                    <div className={styles.cardIdentity}><span className={styles.cardBasic}>{t.basic}</span><strong>{pokemon ? titleCase(pokemon.name) : "—"}</strong></div>
+                    <div className={styles.cardHp}><small>HP</small><strong>{hp ?? "—"}</strong><span aria-hidden="true">✦</span></div>
+                  </div>
+                  <div className={styles.artFrame}>
+                    <div className={styles.spriteStage}><span className={styles.artSun} aria-hidden="true" /><span className={styles.artHills} aria-hidden="true" />{artwork ? <img className={styles.sprite} src={artwork} alt={`${shiny ? "Shiny " : ""}${titleCase(pokemon?.name ?? "Pokémon")}`} draggable={false} /> : <span className={styles.spritePlaceholder}>{t.waiting}</span>}</div>
+                    <div className={styles.artCaption}><span>{t.cardNumber} {pokemon ? String(pokemon.id).padStart(3, "0") : "—"}</span><span>{titleCase(pokemonType)}</span></div>
+                  </div>
+                  <div className={styles.cardContent}>
+                    <div className={styles.cardFeature}><span className={styles.featureIcon} aria-hidden="true">✦</span><div><small>{t.cardAbility}</small><strong>{pokemon?.abilities[0] ? titleCase(pokemon.abilities[0].ability.name) : "—"}</strong></div></div>
+                    <div className={styles.cardFeature}><span className={styles.featureIcon} aria-hidden="true">✧</span><div><small>{t.cardMove}</small><strong>{pokemon?.moves[0] ? titleCase(pokemon.moves[0].move.name) : "—"}</strong></div></div>
+                    <div className={styles.cardStatLine}><span>HP <strong>{hp ?? "—"}</strong></span><span>ATK <strong>{attack ?? "—"}</strong></span><span>DEF <strong>{defense ?? "—"}</strong></span></div>
+                  </div>
+                  <div className={styles.cardFoot}><span>POKÉAPI • {t.cardStats}</span><span>#{String(pokemon?.id ?? 0).padStart(3, "0")}</span></div>
+                </div>
               </div>
-              <div className={styles.artFrame}>
-                <div className={styles.spriteStage}><span className={styles.artSun} aria-hidden="true" /><span className={styles.artHills} aria-hidden="true" />{artwork ? <img className={styles.sprite} src={artwork} alt={`${shiny ? "Shiny " : ""}${titleCase(pokemon?.name ?? "Pokémon")}`} /> : <span className={styles.spritePlaceholder}>{t.waiting}</span>}</div>
-                <div className={styles.artCaption}><span>{t.cardNumber} {pokemon ? String(pokemon.id).padStart(3, "0") : "—"}</span><span>{titleCase(pokemonType)}</span></div>
-              </div>
-              <div className={styles.cardContent}>
-                <div className={styles.cardFeature}><span className={styles.featureIcon} aria-hidden="true">✦</span><div><small>{t.cardAbility}</small><strong>{pokemon?.abilities[0] ? titleCase(pokemon.abilities[0].ability.name) : "—"}</strong></div></div>
-                <div className={styles.cardFeature}><span className={styles.featureIcon} aria-hidden="true">✧</span><div><small>{t.cardMove}</small><strong>{pokemon?.moves[0] ? titleCase(pokemon.moves[0].move.name) : "—"}</strong></div></div>
-                <div className={styles.cardStatLine}><span>HP <strong>{hp ?? "—"}</strong></span><span>ATK <strong>{attack ?? "—"}</strong></span><span>DEF <strong>{defense ?? "—"}</strong></span></div>
-              </div>
-              <div className={styles.cardFoot}><span>POKÉAPI • {t.cardStats}</span><span>#{String(pokemon?.id ?? 0).padStart(3, "0")}</span></div>
+              <div className={styles.cardBack} aria-hidden="true"><img className={styles.cardBackImage} src="/images/ditto-lab/pokemon-card-back.png" alt="" draggable={false} /></div>
+            </div>
+          </div>
+          <div className={styles.rotationControls} aria-label={t.cardControls}>
+            <p id="card-drag-hint" className={styles.dragHint}>{t.dragCard}</p>
+            <div className={styles.rotationButtons}>
+              <button type="button" onClick={() => setRotation(({ x, y }) => ({ x, y: y + 180 }))}>↻ {t.flipCard}</button>
+              <button type="button" onClick={() => setRotation({ x: 0, y: 0 })}>⌂ {t.resetCard}</button>
+            </div>
+            <div className={styles.angleSliders}>
+              <label><span>{t.horizontalAngle}<output>{dialAngle(rotation.y)}°</output></span><input type="range" min="0" max="360" value={dialAngle(rotation.y)} onChange={(event) => setRotation(({ x }) => ({ x, y: Number(event.target.value) }))} /></label>
+              <label><span>{t.verticalAngle}<output>{dialAngle(rotation.x)}°</output></span><input type="range" min="0" max="360" value={dialAngle(rotation.x)} onChange={(event) => setRotation(({ y }) => ({ x: Number(event.target.value), y }))} /></label>
             </div>
           </div>
           <div className={styles.formSwitch} aria-label="Pokémon form">

@@ -33,7 +33,7 @@
 .endpoint mark { padding: 3px 4px; border-radius: 4px; background: var(--type-pale); color: var(--type-deep); font-weight: 800; }
 .inputRow { display: flex; gap: 9px; width: min(100%, 520px); margin-top: 10px; }
 .inputRow input { min-width: 0; flex: 1; min-height: 46px; padding: 0 14px; border: 1px solid #cbd8ca; border-radius: 10px; background: #fff; color: var(--ink); font: inherit; font-size: 14px; }
-.inputRow input:focus-visible, .requestButton:focus-visible, .sampleBrowser button:focus-visible { outline: 2px solid var(--type-deep); outline-offset: 2px; }
+.inputRow input:focus-visible, .requestButton:focus-visible, .sampleBrowser button:focus-visible, .rotationControls button:focus-visible, .angleSliders input:focus-visible { outline: 2px solid var(--type-deep); outline-offset: 2px; }
 .requestButton { min-height: 46px; padding: 0 18px; border: 0; border-radius: 10px; background: #24372c; color: white; font-size: 13px; font-weight: 800; cursor: pointer; transition: transform .2s, background .2s; }
 .requestButton:hover { transform: translateY(-2px); background: var(--type-deep); }
 .requestButton:disabled { cursor: wait; opacity: .65; transform: none; }
@@ -58,8 +58,12 @@
 .error { color: #a43f3f; }
 .cardGallery { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 0; padding: 26px 24px 24px; border: 1px solid #e2e6df; border-radius: 30px; background: radial-gradient(circle at 50% 42%, var(--type-pale), #ffffff 67%); box-shadow: 0 28px 80px #29372a16; }
 .galleryLabel { align-self: stretch; margin: 0 0 19px; color: #5e6d60; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-align: center; text-transform: uppercase; }
-.pokemonCard { width: min(100%, 390px); padding: 10px; border: 5px solid transparent; border-radius: 19px; background: linear-gradient(135deg, #f9fbf9, #a7b0b0 15%, #edf1ee 37%, #87928f 65%, #f8f9f7 92%) padding-box, var(--frame-edge) border-box; box-shadow: 0 4px 0 #737f7a, 0 24px 45px #1c30263a; transform: rotate(-1deg); transition: transform .25s ease; }
-.pokemonCard:hover { transform: rotate(0deg) translateY(-4px); }
+.cardStage { width: min(100%, 390px); perspective: 1400px; }
+.cardRotator { position: relative; width: 100%; transform-style: preserve-3d; transform: rotateX(var(--rotate-x)) rotateY(var(--rotate-y)) rotateZ(-1deg); transition: transform .65s cubic-bezier(.2,.7,.2,1); cursor: grab; touch-action: none; user-select: none; }
+.cardDragging { cursor: grabbing; transition: none; }
+.pokemonCard { width: 100%; padding: 10px; border: 5px solid transparent; border-radius: 19px; background: linear-gradient(135deg, #f9fbf9, #a7b0b0 15%, #edf1ee 37%, #87928f 65%, #f8f9f7 92%) padding-box, var(--frame-edge) border-box; box-shadow: 0 4px 0 #737f7a, 0 24px 45px #1c30263a; backface-visibility: hidden; -webkit-backface-visibility: hidden; transform: translateZ(1px); }
+.cardBack { position: absolute; inset: 0; overflow: hidden; border-radius: 19px; background: #192956; box-shadow: 0 4px 0 #16234b, 0 24px 45px #1c30263a; backface-visibility: hidden; -webkit-backface-visibility: hidden; transform: rotateY(180deg) translateZ(1px); }
+.cardBackImage { display: block; width: 100%; height: 100%; object-fit: fill; pointer-events: none; }
 .frameSilver { --frame-edge: linear-gradient(135deg, #f6fbfb, #748488 17%, #e9f0ef 34%, #728188 55%, #fff 76%, #859399); }
 .frameYellow { --frame-edge: linear-gradient(135deg, #fff6a8, #bb8706 17%, #ffe95c 34%, #bd8a08 55%, #fff7ad 76%, #aa7900); }
 .frameHolo { --frame-edge: conic-gradient(from 35deg, #9ee9f4, #ffd4e9, #d6b9ff, #fff6b9, #a8f7d9, #9ee9f4, #d6b9ff, #fff6b9, #9ee9f4); }
@@ -88,7 +92,18 @@
 .cardStatLine { display: flex; justify-content: space-between; gap: 8px; padding: 10px 2px 5px; color: #40523e; font-size: 10px; font-weight: 700; }
 .cardStatLine strong { margin-left: 3px; color: #23372b; font-size: 13px; }
 .cardFoot { display: flex; justify-content: space-between; gap: 7px; padding: 6px 3px 0; border-top: 2px solid #7082629c; color: #4c614d; font-size: 8px; font-weight: 800; letter-spacing: .04em; }
-.formSwitch { display: flex; gap: 3px; margin-top: 25px; padding: 4px; border: 1px solid #d8e1d6; border-radius: 99px; background: #fff; }
+.rotationControls { width: min(100%, 390px); margin-top: 22px; }
+.dragHint { margin: 0 0 12px; color: #66776a; font-size: 11px; line-height: 1.5; text-align: center; }
+.rotationButtons { display: flex; justify-content: center; gap: 8px; }
+.rotationButtons button { min-height: 36px; padding: 7px 15px; border: 1px solid #cad7ca; border-radius: 999px; background: #fff; color: #273a2e; font: inherit; font-size: 11px; font-weight: 800; cursor: pointer; }
+.rotationButtons button:first-child { border-color: #273a2e; background: #273a2e; color: white; }
+.rotationButtons button:hover { border-color: var(--type-deep); }
+.angleSliders { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 17px; }
+.angleSliders label { display: grid; gap: 7px; min-width: 0; color: #526657; font-size: 11px; font-weight: 700; }
+.angleSliders label span { display: flex; justify-content: space-between; gap: 4px; }
+.angleSliders output { color: var(--type-deep); font-variant-numeric: tabular-nums; }
+.angleSliders input { width: 100%; margin: 0; accent-color: var(--type-deep); cursor: pointer; }
+.formSwitch { display: flex; gap: 3px; margin-top: 20px; padding: 4px; border: 1px solid #d8e1d6; border-radius: 99px; background: #fff; }
 .formSwitch button { padding: 9px 14px; }
 .formSwitch button:disabled { cursor: not-allowed; opacity: .45; }
 .dataSection { padding: 29px 0 40px; border-top: 1px solid #d2ddd0; }
@@ -133,7 +148,7 @@
   .hero { gap: 28px; padding: 24px 0 58px; }
   .cardGallery { order: -1; padding: 17px 10px 22px; border-radius: 22px; }
   .galleryLabel { margin-bottom: 13px; }
-  .pokemonCard { width: min(100% - 12px, 375px); }
+  .cardStage { width: min(100% - 12px, 375px); }
   .heroCopy h1 { font-size: clamp(43px, 11vw, 64px); }
   .heroCopy h1 span { top: -15px; margin-left: 5px; font-size: 25px; }
   .intro { font-size: 14px; }
@@ -153,4 +168,4 @@
   .sprite { height: 200px; }
   .stat { grid-template-columns: 67px 1fr 26px; }
 }
-@media (prefers-reduced-motion: reduce) { .sprite { animation: none; } .pokemonCard, .requestButton { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .sprite { animation: none; } .cardRotator, .requestButton { transition: none; } }
