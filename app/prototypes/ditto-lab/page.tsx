@@ -127,19 +127,6 @@ const sampleGroups = [
   ] },
 ] as const;
 
-// Transparent PokéAPI artwork forms the circle behind the currently selected card.
-const orbitPokemon = [
-  { id: 6, className: "orbitCharizard" },
-  { id: 12, className: "orbitButterfree" },
-  { id: 94, className: "orbitGengar" },
-  { id: 1, className: "orbitBulbasaur" },
-  { id: 25, className: "orbitPikachu" },
-  { id: 143, className: "orbitSnorlax" },
-  { id: 133, className: "orbitEevee" },
-  { id: 448, className: "orbitLucario" },
-  { id: 393, className: "orbitPiplup" },
-] as const;
-
 function isPokemon(value: unknown): value is Pokemon {
   if (!value || typeof value !== "object") return false;
   const item = value as Partial<Pokemon>;
@@ -245,16 +232,34 @@ export default function DittoLab() {
       </header>
 
       <section className={styles.hero} aria-labelledby="ditto-title">
-        <div className={styles.showcase}>
-          <div className={styles.orbit} aria-hidden="true">
-            {orbitPokemon.map(({ id, className }) => <img key={id} className={`${styles.orbitPokemon} ${styles[className]}`} src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`} alt="" />)}
+        <div className={styles.heroCopy}>
+          <p className={styles.eyebrow}><span aria-hidden="true">●</span>{t.eyebrow}</p>
+          <h1 id="ditto-title">{t.title}<span aria-hidden="true">✳</span></h1>
+          <p className={styles.intro}>{t.intro}</p>
+          <form className={styles.requestForm} onSubmit={submit}>
+            <label htmlFor="pokemon-name">{t.edit}</label>
+            <div className={styles.endpoint}><strong>GET</strong><code>{endpointBase}<mark>{previewName}</mark></code></div>
+            <div className={styles.inputRow}>
+              <input id="pokemon-name" value={input} onChange={(event) => setInput(event.target.value)} autoComplete="off" spellCheck={false} aria-label={t.edit} />
+              <button className={styles.requestButton} type="submit" disabled={status === "loading"}>↗ &nbsp;{status === "loading" ? t.asking : t.ask}</button>
+            </div>
+          </form>
+          <div className={styles.sampleBrowser}>
+            <div className={styles.sampleHeading}><strong>{t.examples}</strong><small>{t.browseHelp}</small></div>
+            <div className={styles.sampleCategories} aria-label={t.examples}>
+              {sampleGroups.map((group) => <button key={group.type} type="button" className={styles.sampleCategory} aria-pressed={selectedGroup === group.type} onClick={() => setSelectedGroup(group.type)} style={{ "--chip-color": typeColors[group.type].deep } as CSSProperties}>{language === "zh" ? group.zh : group.en}</button>)}
+            </div>
+            <div className={styles.sampleGrid} aria-label={language === "zh" ? visibleGroup.zh : visibleGroup.en}>
+              {visibleGroup.items.map((sample) => <button key={sample.slug} type="button" className={styles.sampleItem} aria-pressed={pokemon?.name === sample.slug} onClick={() => select(sample.slug)}>
+                <span className={styles.sampleNumber}>#{String(sample.id).padStart(3, "0")}</span>
+                <span><strong>{language === "zh" ? sample.zh : titleCase(sample.slug)}</strong><small>{language === "zh" ? titleCase(sample.slug) : sample.zh}</small></span>
+                <span aria-hidden="true">↗</span>
+              </button>)}
+            </div>
           </div>
-          <div className={styles.showcaseHeader}>
-            <p className={styles.eyebrow}><span aria-hidden="true">●</span>{t.eyebrow}</p>
-            <h1 id="ditto-title">{t.title}<span aria-hidden="true">✳</span></h1>
-            <p className={styles.intro}>{t.intro}</p>
-          </div>
-          <div className={styles.cardGallery}>
+          <p className={`${styles.status} ${status === "error" ? styles.error : ""}`} role="status" aria-live="polite">● &nbsp;{message}</p>
+        </div>
+        <div className={styles.cardGallery}>
           <p className={styles.galleryLabel}>✦ {t.cardHint}</p>
           <div className={styles.pokemonCard} aria-label={`${pokemon ? titleCase(pokemon.name) : "Pokémon"} card`}>
             <div className={styles.cardInner}>
@@ -278,31 +283,6 @@ export default function DittoLab() {
             <button type="button" aria-pressed={!shiny} onClick={() => setShiny(false)}>{t.normal}</button>
             <button type="button" aria-pressed={shiny} onClick={() => setShiny(true)} disabled={!pokemon?.sprites.front_shiny}>{t.shiny}</button>
           </div>
-          </div>
-        </div>
-        <div className={styles.heroCopy}>
-          <form className={styles.requestForm} onSubmit={submit}>
-            <label htmlFor="pokemon-name">{t.edit}</label>
-            <div className={styles.endpoint}><strong>GET</strong><code>{endpointBase}<mark>{previewName}</mark></code></div>
-            <div className={styles.inputRow}>
-              <input id="pokemon-name" value={input} onChange={(event) => setInput(event.target.value)} autoComplete="off" spellCheck={false} aria-label={t.edit} />
-              <button className={styles.requestButton} type="submit" disabled={status === "loading"}>↗ &nbsp;{status === "loading" ? t.asking : t.ask}</button>
-            </div>
-          </form>
-          <div className={styles.sampleBrowser}>
-            <div className={styles.sampleHeading}><strong>{t.examples}</strong><small>{t.browseHelp}</small></div>
-            <div className={styles.sampleCategories} aria-label={t.examples}>
-              {sampleGroups.map((group) => <button key={group.type} type="button" className={styles.sampleCategory} aria-pressed={selectedGroup === group.type} onClick={() => setSelectedGroup(group.type)} style={{ "--chip-color": typeColors[group.type].deep } as CSSProperties}>{language === "zh" ? group.zh : group.en}</button>)}
-            </div>
-            <div className={styles.sampleGrid} aria-label={language === "zh" ? visibleGroup.zh : visibleGroup.en}>
-              {visibleGroup.items.map((sample) => <button key={sample.slug} type="button" className={styles.sampleItem} aria-pressed={pokemon?.name === sample.slug} onClick={() => select(sample.slug)}>
-                <span className={styles.sampleNumber}>#{String(sample.id).padStart(3, "0")}</span>
-                <span><strong>{language === "zh" ? sample.zh : titleCase(sample.slug)}</strong><small>{language === "zh" ? titleCase(sample.slug) : sample.zh}</small></span>
-                <span aria-hidden="true">↗</span>
-              </button>)}
-            </div>
-          </div>
-          <p className={`${styles.status} ${status === "error" ? styles.error : ""}`} role="status" aria-live="polite">● &nbsp;{message}</p>
         </div>
       </section>
 
