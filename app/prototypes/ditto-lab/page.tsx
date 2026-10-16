@@ -210,6 +210,10 @@ export default function DittoLab() {
     : pokemon.sprites.other?.["official-artwork"]?.front_default ?? pokemon.sprites.front_default);
   const pokemonType = pokemon?.types[0]?.type.name ?? "normal";
   const palette = pokemon?.name === "ditto" ? dittoColors : typeColors[pokemonType] ?? typeColors.normal;
+  // Frame finishes are a visual design choice; PokéAPI does not provide card rarity.
+  const frameFinish = shiny || ["fire", "dragon", "ghost", "psychic"].includes(pokemonType)
+    ? styles.frameHolo
+    : pokemon?.name === "pikachu" ? styles.frameYellow : styles.frameSilver;
   const cardStyle = {
     "--type-main": palette.main,
     "--type-deep": palette.deep,
@@ -261,7 +265,7 @@ export default function DittoLab() {
         </div>
         <div className={styles.cardGallery}>
           <p className={styles.galleryLabel}>✦ {t.cardHint}</p>
-          <div className={styles.pokemonCard} aria-label={`${pokemon ? titleCase(pokemon.name) : "Pokémon"} card`}>
+          <div className={`${styles.pokemonCard} ${frameFinish}`} aria-label={`${pokemon ? titleCase(pokemon.name) : "Pokémon"} card`}>
             <div className={styles.cardInner}>
               <div className={styles.cardTop}>
                 <div className={styles.cardIdentity}><span className={styles.cardBasic}>{t.basic}</span><strong>{pokemon ? titleCase(pokemon.name) : "—"}</strong></div>
