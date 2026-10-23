@@ -1,6 +1,6 @@
 # My bookshelf / 我的书架
 
-Open `/prototypes/my-bookshelf` to browse finished books from Notion. The gallery loads automatically, hides rows with empty titles, and supports search, genre filters, rating/title/author sorting and full reviews.
+Open `/prototypes/my-bookshelf` to browse finished books from Notion. The reading room loads automatically, hides rows with empty titles, and supports search, genre filters and full reviews. Drag books from the waiting area onto either wooden shelf (six books per shelf), between shelves, or back to the waiting area. Click any book to see its details; the Upper shelf, Lower shelf and Unshelve buttons offer a keyboard-accessible alternative. Reset returns all books to the waiting area. Shelf arrangements are saved in this browser using localStorage, not written to Notion. Other browsers/devices have their own arrangements.
 
 ## Local setup
 
