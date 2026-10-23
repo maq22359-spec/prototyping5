@@ -1,0 +1,15 @@
+import Link from "next/link";
+import { ArrowLeft, ArrowUpRight, Globe2, ImagePlus, Link2, LockKeyhole } from "lucide-react";
+import { getBoardPage } from "@/app/prototypes/inspiration-library/lib/data";
+import { Shell } from "@/app/prototypes/inspiration-library/components/shell";
+import { AddItemButton, BoardSettings, ItemControls, ShareButton } from "@/app/prototypes/inspiration-library/components/forms";
+
+export const metadata = { title: "Board", robots: { index: false, follow: false } };
+export const dynamic = "force-dynamic";
+export default async function BoardPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const { board, items, isOwner, session } = await getBoardPage(id);
+  return <Shell user={session?.user}><div className="page-content board-page"><Link href="/prototypes/inspiration-library" className="back-link"><ArrowLeft size={14} />{isOwner ? "My boards" : "Inspiration library"}</Link><section className="board-header"><div><div className="eyebrow">{board.is_public ? <Globe2 size={13} /> : <LockKeyhole size={13} />}{board.is_public ? "PUBLIC BOARD · VIEW WITH A LINK" : "PRIVATE · ONLY YOU"}</div><h1>{board.title}</h1>{board.description && <p className="hero-description">{board.description}</p>}<p className="board-count">{items.length} {items.length === 1 ? "item" : "items"}<span>·</span>{isOwner ? "A collection by you" : "A shared collection · View only"}</p></div>{isOwner && <div className="board-actions"><BoardSettings board={board} /><AddItemButton boardId={board.id} /></div>}</section>{board.is_public && <div className="share-row"><span>Good things are better shared.</span><ShareButton /></div>}
+    {items.length === 0 ? <div className="empty-state"><ImagePlus size={38} strokeWidth={1.2} /><h2>{isOwner ? "A little blank space. A lot of possibility." : "A collection in the making."}</h2><p>{isOwner ? "Add an image or a link to give this board its first spark." : "There’s nothing here just yet. Come back for a little inspiration."}</p>{isOwner && <AddItemButton boardId={board.id} />}</div> : <div className="masonry">{items.map((item) => <article className="item-card" key={item.id}>{item.image_url ? <a href={item.link_url || item.image_url} target="_blank" rel="noopener noreferrer" className="item-image-link"><img src={item.image_url} alt={item.title || "Saved inspiration"} loading="lazy" referrerPolicy="no-referrer" /></a> : <a href={item.link_url!} target="_blank" rel="noopener noreferrer" className="link-preview"><Link2 size={26} /><span>{new URL(item.link_url!).hostname.replace(/^www\./, "")}</span><ArrowUpRight size={18} /></a>}<div className="item-body">{item.title && <h3>{item.title}</h3>}{item.note && <p>{item.note}</p>}{item.link_url && <a className="item-source" href={item.link_url} target="_blank" rel="noopener noreferrer">{new URL(item.link_url).hostname.replace(/^www\./, "")}<ArrowUpRight size={12} /></a>}{isOwner && <ItemControls item={item} />}</div></article>)}</div>}
+  </div></Shell>;
+}

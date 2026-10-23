@@ -6,6 +6,7 @@ import MushroomFeature from './mushroom/Feature';
 import styles from './styles/home.module.css';
 
 const prototypes = [
+  {title: 'Inspiration library / 灵感库', description: 'A personal place to collect images, links, and ideas. 用画板收藏图片、链接和灵感。', path: '/prototypes/inspiration-library'},
   {title: 'My bookshelf / 我的书架', description: 'Books, reflections, and a life in reading. 由 Notion 驱动的私人阅读书架。', path: '/prototypes/my-bookshelf'},
   {title: 'MA QIANYI / Kate', description: 'A name, a little daydream, a rainy afternoon.', path: '/name'},
   {title: 'Typography experiments / 字体实验', description: 'Shape your words with CSS. 用 CSS 探索文字的形状。', path: '/prototypes/typography-experiments'},

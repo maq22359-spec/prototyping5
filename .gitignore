@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Inspiration library: credentials stay local; allow only an empty template.
+!.env.example
+work/
+outputs/

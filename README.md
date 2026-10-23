@@ -133,3 +133,14 @@ Create a new component named Input with these specifications:
    - Label should be properly associated with input
    - Error messages should be announced by screen readers
 ```
+
+
+## Inspiration library
+
+A personal image-and-link library with private boards, public view-only links, Better Auth email/password authentication, and Supabase Postgres through `pg`.
+
+- Open `/prototypes/inspiration-library`, or select it from the homepage.
+- Keep `DATABASE_URL`, `BETTER_AUTH_SECRET`, and `BETTER_AUTH_URL` in the root `.env.local`. Never commit that file. An empty `.env.example` is provided.
+- The SQL files in `db/migrations` have already been applied to the configured Supabase project; do not reapply them to that database.
+- Run `npm run test:inspiration-library` for its permission and validation tests.
+- See [the prototype README](app/prototypes/inspiration-library/README.md) for setup, migrations, and access rules.
